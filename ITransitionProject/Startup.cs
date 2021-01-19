@@ -36,6 +36,7 @@ namespace ITransitionProject
         {
             if (env.IsDevelopment())
             {
+                app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
             }
             else
@@ -58,6 +59,6 @@ namespace ITransitionProject
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
-        }
+        }        
     }
 }

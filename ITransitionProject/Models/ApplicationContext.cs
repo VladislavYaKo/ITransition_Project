@@ -11,7 +11,13 @@ namespace ITransitionProject.Models
     {
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
-            Database.EnsureCreated();
+        }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<User>().Property(p => p.intId).ValueGeneratedOnAdd();
+            builder.Entity<User>().Property(p => p.intId).Metadata.SetAfterSaveBehavior(Microsoft.EntityFrameworkCore.Metadata.PropertySaveBehavior.Ignore);
+            base.OnModelCreating(builder);
         }
     }
 }
