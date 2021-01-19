@@ -29,6 +29,10 @@ namespace ITransitionProject
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
                 );
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationContext>();
+            services.Configure<SecurityStampValidatorOptions>(options =>
+            {
+                options.ValidationInterval = TimeSpan.Zero;
+            });
             services.AddControllersWithViews();
         }
 

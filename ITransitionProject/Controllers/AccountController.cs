@@ -38,6 +38,7 @@ namespace ITransitionProject.Controllers
                 var result = await userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    await userManager.SetLockoutEndDateAsync(user, DateTime.MaxValue);
                     return RedirectToAction("Index", "Home");
                 }
                 else

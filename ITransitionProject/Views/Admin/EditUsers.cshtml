@@ -1,20 +1,40 @@
 ﻿@model IEnumerable<User>
 
 <h2>Список пользователей</h2>
-<table class="table">
-    <tr>
-        <th>Id</th>
-        <th>Строковый Id</th>
-        <th>Имя</th>
-        <th>Email</th>
-    </tr>
-    @foreach (User user in Model)
-    {
+<form asp-controller="Admin" asp-action="EditUsers" method="post">
+    <button value="Block" name="actionBtn">Заблокировать</button>
+    <button value="Unblock" name="actionBtn">Разблокировать</button>
+    <button value="Delete" name="actionBtn">Удалить</button>
+    <table class="table">
         <tr>
-            <td>@user.intId</td>
-            <td>@user.Id</td>
-            <td>@user.NotLoginName</td>
-            <td>@user.Email</td>
+            <th><input type="checkbox" id="changeAll" onclick="changeAllClick()" name="changeAll" /></th>
+            <th>Id</th>
+            <th>Строковый Id</th>
+            <th>Имя</th>
+            <th>Email</th>
         </tr>
+        @foreach (User user in Model)
+        {
+            <tr>
+                <td><input type="checkbox" name="choosenUser" value="@user.intId" class="userCheckBox" /></td>
+                <td>@user.intId</td>
+                <td>@user.Id</td>
+                <td>@user.NotLoginName</td>
+                <td>@user.Email</td>
+            </tr>
+        }
+    </table>
+</form>
+
+@section scripts
+{ 
+<script>
+    function changeAllClick(e) {
+        var checkboxes = document.getElementsByClassName('userCheckBox');
+        var changeAllBox = document.getElementById('changeAll');
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = changeAllBox.checked;
+        };
     }
-</table>
+</script>
+}
