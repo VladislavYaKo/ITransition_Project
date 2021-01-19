@@ -39,6 +39,7 @@ namespace ITransitionProject.Controllers
                 if (result.Succeeded)
                 {
                     await userManager.SetLockoutEndDateAsync(user, DateTime.MaxValue);
+                    await userManager.AddToRoleAsync(user, "user");
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -74,7 +75,10 @@ namespace ITransitionProject.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Неправильный логин или пароль");
+                    if (await userManager.IsLockedOutAsync(await userManager.FindByEmailAsync(model.Email)))
+                        ModelState.AddModelError("", "Вы заблокированны. Обратитесь к администратору");
+                    else
+                        ModelState.AddModelError("", "Неправильный логин или пароль");
                 }
             }
             return View(model);

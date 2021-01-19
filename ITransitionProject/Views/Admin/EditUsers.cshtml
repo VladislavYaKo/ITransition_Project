@@ -1,10 +1,12 @@
-﻿@model IEnumerable<User>
+﻿@*@model IEnumerable<User>*@
+@using Microsoft.AspNetCore.Identity;
+@model UserManager<User>
 
 <h2>Список пользователей</h2>
 <form asp-controller="Admin" asp-action="EditUsers" method="post">
-    <button value="Block" name="actionBtn">Заблокировать</button>
-    <button value="Unblock" name="actionBtn">Разблокировать</button>
-    <button value="Delete" name="actionBtn">Удалить</button>
+    <button value="Block" name="actionBtn" class="btn btn-warning">Заблокировать</button>
+    <button value="Unblock" name="actionBtn" class="btn btn-success">Разблокировать</button>
+    <button value="Delete" name="actionBtn" class="btn btn-danger">Удалить</button>
     <table class="table">
         <tr>
             <th><input type="checkbox" id="changeAll" onclick="changeAllClick()" name="changeAll" /></th>
@@ -12,29 +14,51 @@
             <th>Строковый Id</th>
             <th>Имя</th>
             <th>Email</th>
+            <th>Статус</th>
+            <th>Роль</th>
         </tr>
-        @foreach (User user in Model)
-        {
-            <tr>
-                <td><input type="checkbox" name="choosenUser" value="@user.intId" class="userCheckBox" /></td>
-                <td>@user.intId</td>
-                <td>@user.Id</td>
-                <td>@user.NotLoginName</td>
-                <td>@user.Email</td>
-            </tr>
+        @{
+            List<User> users = Model.Users.ToList();
+            foreach (User user in users)
+            {
+                <tr>
+                    <td><input type="checkbox" name="choosenUser" value="@user.intId" class="userCheckBox" /></td>
+                    <td>@user.intId</td>
+                    <td>@user.Id</td>
+                    <td>@user.NotLoginName</td>
+                    <td>@user.Email</td>
+                    @if (user.LockoutEnabled)
+                    {
+                        <td>Заблокирован</td>
+                    }
+                    else
+                    {
+                        <td>Не заблокирован</td>
+                    }
+                    @if (await Model.IsInRoleAsync(user, "admin"))
+                    {
+                        <td>Администратор</td>
+                    }
+                    else
+                    {
+                        <td>Пользователь</td>
+                    }
+                </tr>
+            }
         }
+
     </table>
 </form>
 
 @section scripts
-{ 
-<script>
-    function changeAllClick(e) {
-        var checkboxes = document.getElementsByClassName('userCheckBox');
-        var changeAllBox = document.getElementById('changeAll');
-        for (var i = 0; i < checkboxes.length; i++) {
-            checkboxes[i].checked = changeAllBox.checked;
-        };
-    }
-</script>
+{
+    <script>
+        function changeAllClick(e) {
+            var checkboxes = document.getElementsByClassName('userCheckBox');
+            var changeAllBox = document.getElementById('changeAll');
+            for (var i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].checked = changeAllBox.checked;
+            };
+        }
+    </script>
 }

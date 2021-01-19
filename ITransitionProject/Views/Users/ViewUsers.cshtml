@@ -1,0 +1,16 @@
+﻿@model IEnumerable<User>
+
+<table class="table">
+    <tr>
+        <th>Имя</th>
+    </tr>
+    @{
+        foreach (User user in Model)
+        {
+            <tr>
+                <td>@user.NotLoginName</td>
+                <td><a asp-controller="Users" asp-action="ViewCollections" asp-route-ViewUserId="@user.Id" class="btn btn-primary">Просмотреть</a></td>
+            </tr>
+        }
+    }
+</table>

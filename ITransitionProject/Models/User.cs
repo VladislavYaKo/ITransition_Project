@@ -12,5 +12,6 @@ namespace ITransitionProject.Models
         public int intId { get; set; }
 
         public string NotLoginName { get; set; }
+        public List<Collection> Collections { get; set; }
     }
 }

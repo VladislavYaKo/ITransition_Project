@@ -25,8 +25,7 @@ namespace ITransitionProject.Controllers
         [HttpGet]
         public IActionResult EditUsers()
         {
-            List<User> users = userManager.Users.ToList();
-            return View(users);
+            return View(userManager);
         }
 
         [HttpPost]

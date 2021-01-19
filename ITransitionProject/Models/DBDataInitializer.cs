@@ -29,19 +29,6 @@ namespace ITransitionProject.Models
                     await userManager.AddToRoleAsync(admin, "admin");
                 }
             }
-            /*if (await userManager.IsInRoleAsync(admin, "admin") == false)
-            {
-                IdentityResult result = await userManager.AddToRoleAsync(admin, "admin");
-                if(result.Succeeded)
-                {
-                    string debug = "ok";
-                }
-                else
-                {
-                    string debug = result.ToString();
-                    List<IdentityError> debugList = result.Errors.ToList();
-                }
-            }*/
         }
     }
 }
