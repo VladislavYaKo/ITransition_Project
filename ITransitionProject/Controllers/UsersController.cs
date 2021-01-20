@@ -21,10 +21,9 @@ namespace ITransitionProject.Controllers
             return View(userManager.Users as IEnumerable<User>);
         }
 
-        public async Task<IActionResult> ViewCollections(string ViewUserId)
+        public IActionResult UserCollections(int ViewUserIntId)
         {
-            //string ViewUserId = Request.RouteValues["ViewUserId"].ToString();
-            User user = await userManager.FindByIdAsync(ViewUserId);
+            User user = userManager.Users.FirstOrDefault(u => u.intId == ViewUserIntId);
             return View(user.Collections);
         }
     }

@@ -9,7 +9,7 @@
         {
             <tr>
                 <td>@user.NotLoginName</td>
-                <td><a asp-controller="Users" asp-action="ViewCollections" asp-route-ViewUserId="@user.Id" class="btn btn-primary">Просмотреть</a></td>
+                <td><a asp-controller="Users" asp-action="UserCollections" asp-route-ViewUserIntId="@user.intId" class="btn btn-primary">Просмотреть</a></td>
             </tr>
         }
     }

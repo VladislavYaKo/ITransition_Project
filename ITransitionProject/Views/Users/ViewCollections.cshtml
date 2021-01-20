@@ -6,20 +6,21 @@
         <th>Тема</th>
     </tr>
     @{
-        foreach (Collection coll in Model)
-        {
-            <tr>
-                <td>@coll.Name</td>
-                <td>@coll.Theme.ToString()</td>
-                @if (!string.IsNullOrEmpty(coll.imgUrl))
-                {
-                    <td><img src ="@coll.imgUrl" class="img-fluid"/></td>
-                }
-                else
-                {
+        if (Model != null)
+            foreach (Collection coll in Model)
+            {
+                <tr>
+                    <td>@coll.Name</td>
+                    <td>@coll.Theme.ToString()</td>
+                    @if (!string.IsNullOrEmpty(coll.imgUrl))
+                    {
+                        <td><img src="@coll.imgUrl" class="img-fluid" /></td>
+                    }
+                    else
+                    {
 
-                }
-            </tr>
-        }
+                    }
+                </tr>
+            }
     }
 </table>
