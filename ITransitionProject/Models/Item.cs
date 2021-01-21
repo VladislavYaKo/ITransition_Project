@@ -13,6 +13,8 @@ namespace ITransitionProject.Models
         [MaxLength(50)]
         public string Name { get; set; }
         //Tags
-        public AdditionalFields AddFields { get; set; }
+        public AdditionalFieldsNames AddFields { get; set; }
+        public int CollectionId { get; set; }
+        public AdditionalFieldsValues AddFieldsValues { get; set; }
     }
 }

@@ -10,10 +10,15 @@ namespace ITransitionProject.Models
     {
         public enum Themes
         {
+            [Display(Name = "Книги")]
             Books,
+            [Display(Name = "Машины")]
             Cars,
+            [Display(Name = "Алкоголь")]
             Alcohol,
+            [Display(Name = "Телефоны")]
             Phones,
+            [Display(Name = "Одежда")]
             Clothes,
         }
         public int Id { get; set; }
@@ -28,6 +33,9 @@ namespace ITransitionProject.Models
         [MaxLength(128)]
         public string briefDesc { get; set; }
         public List<Item> Items { get; set; }
+        [MaxLength(450)]
+        public string UserId { get; set; }
+        public AdditionalFieldsNames AddFieldsNames { get; set; }
 
     }
 }

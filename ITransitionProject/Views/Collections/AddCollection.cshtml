@@ -1,0 +1,86 @@
+﻿@model ITransitionProject.ViewModels.EditCollectionsViewModel
+
+<form method="post" asp-controller="Collections" asp-action="AddCollection">
+    <div asp-validation-summary="ModelOnly"></div>
+    <input type="hidden" name="userId" value="@Model.userId" />
+    <div>
+        <label asp-for="Name"></label><br />
+        <input asp-for="Name" />
+        <span asp-validation-for="Name"></span>
+    </div>
+    <div>
+        <label asp-for="Theme"></label><br />
+        <select asp-for="Theme" asp-items="Html.GetEnumSelectList<Collection.Themes>()">
+            <option selected="selected" disabled="disabled">Выберите тему</option>
+        </select>
+        <span asp-validation-for="Theme"></span>
+    </div>
+    <div>
+        <label asp-for="BriefDesc"></label><br />
+        <input asp-for="BriefDesc" />
+        <span asp-validation-for="BriefDesc"></span>
+    </div>
+    <div>
+        <label asp-for="ImgUrl"></label><br />
+        <input asp-for="ImgUrl" />
+        <span asp-validation-for="ImgUrl"></span>
+    </div>
+    <div id="additional-fields"></div>
+    <input type="button" class="btn" style="color: brown" name="AddIntField" onclick="AddIntFieldClick()" value="Добавить числовое поле">
+    <input type="button" class="btn btn-danger" name="DelIntField" onclick="DelIntFieldClick()" value="Удалить числовое поле"><br />
+    <input type="submit" class="btn btn-primary" value="Добавить коллекцию" />
+</form>
+
+
+@section Scripts
+{
+    <script>
+        var intFieldsNum = 0;
+        function AddIntFieldClick() {
+            if (intFieldsNum >= 3) {
+                alert('Вы не можете создать больше трёх полей!');
+                return;
+            }
+
+            intFieldsNum++;
+            var doc = document,
+                addFields = doc.getElementById('additional-fields'),
+                elemDiv = doc.createElement('div');
+                elemNameLabel = doc.createElement('label'),
+                elemNameInput = doc.createElement('input'),
+                elemBr = doc.createElement('br');
+
+            elemDiv.id = 'int-div-' + intFieldsNum;
+            elemNameLabel.setAttribute('for', 'int-field-' + intFieldsNum);
+            elemNameLabel.id = 'int-label-field-' + intFieldsNum;
+            elemNameLabel.innerHTML = 'Название числового поля';
+            elemNameInput.type = 'text';
+            elemNameInput.maxLength = 20;
+            elemNameInput.id = 'int-field-' + intFieldsNum;
+            elemNameInput.name = 'intFieldName';
+
+            elemDiv.appendChild(elemBr);
+            elemDiv.appendChild(elemNameLabel);
+            elemDiv.appendChild(elemBr);
+            elemDiv.appendChild(elemNameInput);
+            elemDiv.appendChild(elemBr);
+            addFields.appendChild(elemDiv);
+        }
+
+        function DelIntFieldClick() {
+            if (intFieldsNum <= 0)
+                return;
+
+            var doc = document,
+                delDiv = doc.getElementById('int-div-' + intFieldsNum);
+
+            try {
+                delDiv.parentNode.removeChild(delDiv);
+                intFieldsNum--;
+            } catch (e) {
+                alert('Произошла ошибка: ' + e);
+            }
+            
+        }
+    </script>
+}

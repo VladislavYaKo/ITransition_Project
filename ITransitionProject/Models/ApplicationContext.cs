@@ -9,6 +9,8 @@ namespace ITransitionProject.Models
 {
     public class ApplicationContext : IdentityDbContext<User>
     {
+        public DbSet<Collection> Collections { get; set; }
+        public DbSet<Item> Items { get; set; }
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
         }

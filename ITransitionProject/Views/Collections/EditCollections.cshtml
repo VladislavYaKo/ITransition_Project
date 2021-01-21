@@ -1,0 +1,23 @@
+﻿@model IEnumerable<Collection>
+
+<form>
+    <button class="btn btn-primary" asp-controller="Collections" asp-action="AddCollection">Добавить</button>
+    <table class="table">
+        <tr>
+            <th>Название</th>
+            <th>Тема</th>
+            <th>Краткое описание</th>
+        </tr>
+        @if (Model != null)
+            foreach(Collection col in Model)
+            {
+                <tr>
+                    <td>@col.Name</td>
+                    <td>@col.Theme.ToString()</td>
+                    <td>@col.briefDesc</td>
+                    <td><button class="btn" style="color: antiquewhite" asp-controller="" asp-action="" asp-route-colId="@col.Id">Редактировать</button></td>
+                    <td><button class="btn btn-danger" asp-controller="" asp-action="" asp-route-colId="@col.Id">Удалить</button></td>
+                </tr>
+            }
+    </table>
+</form>

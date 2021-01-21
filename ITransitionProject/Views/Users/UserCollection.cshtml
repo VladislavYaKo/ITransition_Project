@@ -1,0 +1,17 @@
+﻿@model IEnumerable<Item>
+
+<table class="table">
+    <tr>
+        <th>Название</th>
+    </tr>
+    @{
+        if (Model != null)
+            foreach (Item item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td><button class="btn btn-primary" name="ViewCollectionId" value="@item.Id">Просмотреть</button></td>
+                </tr>
+            }
+    }
+</table>

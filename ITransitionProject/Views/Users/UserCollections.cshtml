@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Collection>
+
+<form>
+    <input type="hidden" name="ViewUserIntId" value="@ViewBag.userIntId" />
+    <table class="table">
+        <tr>
+            <th>Название</th>
+            <th>Тема</th>
+        </tr>
+        @{
+            if (Model != null)
+                foreach (Collection coll in Model)
+                {
+                    <tr>
+                        <td>@coll.Name</td>
+                        <td>@coll.Theme.ToString()</td>
+                        @if (!string.IsNullOrEmpty(coll.imgUrl))
+                        {
+                            <td><img src="@coll.imgUrl" class="img-fluid" /></td>
+                        }
+                        else
+                        {
+
+                        }
+                        <td><button class="btn btn-primary" name="ViewCollectionId" value="@coll.Id">Просмотреть</button></td>
+                    </tr>
+                }
+        }
+    </table>
+</form>
