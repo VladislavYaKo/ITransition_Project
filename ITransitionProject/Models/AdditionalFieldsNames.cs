@@ -12,7 +12,7 @@ namespace ITransitionProject.Models
         public AdditionalFieldsNames() { }
         public AdditionalFieldsNames (string[] intFieldsNames)
         {
-            this.NumericFieldsNames = String.Join(",", intFieldsNames);
+            this.NumericFieldsNames = intFieldsNames != null ? String.Join(",", intFieldsNames) : null;
         }
         public int Id { get; set; }
         [MaxLength(256)]

@@ -1,0 +1,31 @@
+﻿@model ITransitionProject.ViewModels.EditCollectionItemsViewModel
+
+<h2>@Model.CollectionName: @Model.CollectionTheme.</h2>
+<br />
+<form role="form" method="get">
+    <input type="hidden" name="userId" value="@Model.userId" />
+    <input type="hidden" name="colId" value="@Model.colId" />
+    <input type="hidden" name="colName" value="@Model.CollectionName" />
+    <input type="hidden" name="colTheme" value="@Model.CollectionTheme" />
+    <button asp-controller="" asp-action="AddItem" class="btn btn-success">Добавить</button>
+    <table class="table">
+        <tr>
+            <th></th>
+            <th>Название</th>
+        </tr>
+        @{
+            int i = 1;
+            foreach (Item item in Model.Items)
+            {
+                <tr>
+                    <td>@i. </td>
+                    <td>@item.Name</td>
+                    <td><button asp-controller="" asp-action="" class="btn btn-primary text-sm-center">Просмотреть</button></td>
+                    <td><button asp-controller="" asp-action="" class="btn" style="color: antiquewhite">Редактировать</button></td>
+                    <td><button asp-controller="" asp-action="" class="btn btn-danger">Удалить</button></td>
+                </tr>
+            }
+        }
+    </table>
+</form>
+

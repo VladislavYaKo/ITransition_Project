@@ -19,19 +19,22 @@ namespace ITransitionProject.Controllers
             this.appContext = appContext;
         }
 
-        public IActionResult ViewUsers()
+        public IActionResult ViewUsers(string userId, int colId)
         {            
             return View(userManager.Users as IEnumerable<User>);
         }
 
         public IActionResult UserCollections(int ViewUserIntId)
-        {
-            string userId = userManager.Users.Where(u => u.intId == ViewUserIntId).Select(u => u.Id).FirstOrDefault();
+        {            
+            string userId = userManager.Users.FirstOrDefault(u => u.intId == ViewUserIntId).Id;
+            if (User.IsInRole("admin"))
+                return RedirectToAction("EditCollections", "Collections", new { userId = userId });
+
             ViewBag.userIntId = ViewUserIntId;
             return View(appContext.Collections.Where(col => col.UserId == userId));
         }
 
-        public IActionResult UserCollection(int ViewUserIntId, int ViewCollectionId)
+        public IActionResult UserCollection(int ViewCollectionId)
         {
             List<Item> collItems = appContext.Items.Where(i => i.CollectionId == ViewCollectionId).ToList();
             return View();

@@ -1,7 +1,6 @@
 ﻿@model IEnumerable<Collection>
 
-<form>
-    <input type="hidden" name="ViewUserIntId" value="@ViewBag.userIntId" />
+<form role="form" method="post" asp-action="UserCollection">
     <table class="table">
         <tr>
             <th>Название</th>
@@ -9,20 +8,20 @@
         </tr>
         @{
             if (Model != null)
-                foreach (Collection coll in Model)
+                foreach (Collection col in Model)
                 {
                     <tr>
-                        <td>@coll.Name</td>
-                        <td>@coll.Theme.ToString()</td>
-                        @if (!string.IsNullOrEmpty(coll.imgUrl))
+                        <td>@col.Name</td>
+                        <td>@col.Theme.ToString()</td>
+                        @if (!string.IsNullOrEmpty(col.imgUrl))
                         {
-                            <td><img src="@coll.imgUrl" class="img-fluid" /></td>
+                            <td><img src="@col.imgUrl" class="img-fluid" /></td>
                         }
                         else
                         {
 
-                        }
-                        <td><button class="btn btn-primary" name="ViewCollectionId" value="@coll.Id">Просмотреть</button></td>
+                        }                    
+                        <td><button class="btn btn-primary" name="ViewCollectionId" value="@col.Id">Просмотреть</button></td>
                     </tr>
                 }
         }

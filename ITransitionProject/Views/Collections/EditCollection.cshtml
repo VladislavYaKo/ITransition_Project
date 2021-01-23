@@ -1,24 +1,28 @@
 ﻿@model ITransitionProject.ViewModels.EditCollectionViewModel
 
-<h2>@Model.CollectionName. @Model.CollectionTheme.</h2><br />
-<button asp-controller="" asp-action="" class="btn btn-success">Добавить</button>
-<table class="table">
-    <tr>
-        <th></th>
-        <th>Название</th>
-    </tr>
-    @{ 
-        int i = 1;
-        foreach(Item item in Model.Items)
-        {
-        <tr>
-            <td>@i. </td>
-            <td>@item.Name</td>
-            <td><button asp-controller="" asp-action="" class="btn btn-primary text-sm-center">Просмотреть</button></td>
-            <td><button asp-controller="" asp-action="" class="btn" style="color: antiquewhite">Редактировать</button></td>
-            <td><button asp-controller="" asp-action="" class="btn btn-danger">Удалить</button></td>
-        </tr>
-        }
-    }
-</table>
+<h2>Вы можете поменять только имя, краткое описание, и картинку коллекции.</h2>
 
+<form role="form" method="post" asp-action="EditCollection">
+    <div asp-validation-summary="ModelOnly"></div>
+    <input type="hidden" name="collectionId" value="@Model.collectionId" />
+    <input type="hidden" name="userId" value="@Model.userId" />
+    <div class="form-group">
+        <label asp-for="Name"></label><br />
+        <input asp-for="Name" />
+        <span asp-validation-for="Name"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="BriefDesc"></label><br />
+        <input asp-for="BriefDesc" />
+        <span asp-validation-for="BriefDesc"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ImgUrl"></label><br />
+        <input asp-for="ImgUrl" />
+        <span asp-validation-for="ImgUrl"></span>
+    </div>
+    <a class="btn" asp-action="EditCollections">Отмена</a>
+    <input type="submit" class="btn btn-success" value="Сохранить" />
+</form>
+
+@await Html.PartialAsync("_ValidationScriptsPartial");

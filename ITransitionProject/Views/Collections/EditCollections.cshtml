@@ -1,23 +1,41 @@
 ﻿@model IEnumerable<Collection>
 
-<form>
-    <button class="btn btn-primary" asp-controller="Collections" asp-action="AddCollection">Добавить</button>
+<form method="get">
+    <input type="hidden" name="userId" value="@ViewBag.userId" />
+    <button class="btn btn-primary" asp-controller="Collections" asp-action="AddCollection" name="userId" value="@ViewBag.userId">Добавить</button>    
     <table class="table">
         <tr>
             <th>Название</th>
             <th>Тема</th>
             <th>Краткое описание</th>
+            <th></th>
+            <th></th>
+            <th></th>
         </tr>
         @if (Model != null)
-            foreach(Collection col in Model)
+            foreach (Collection col in Model)
             {
                 <tr>
                     <td>@col.Name</td>
                     <td>@col.Theme.ToString()</td>
                     <td>@col.briefDesc</td>
-                    <td><button class="btn" style="color: antiquewhite" asp-controller="" asp-action="" asp-route-colId="@col.Id">Редактировать</button></td>
-                    <td><button class="btn btn-danger" asp-controller="" asp-action="" asp-route-colId="@col.Id">Удалить</button></td>
+                    <td><button class="btn btn-primary" asp-action="ViewCollection" name="colId" value="@col.Id">Просмотреть</button></td>
+                    <td><button class="btn" style="color: blueviolet" asp-action="EditCollection" name="colId" value="@col.Id">Редактировать</button></td>
+                    <td><a href="#" class="btn btn-danger" data-toggle="modal" data-target="#ApproveModal">Удалить</a></td> @*asp-controller="" asp-action="" name="colId" value="@col.Id"*@
                 </tr>
             }
     </table>
 </form>
+
+<div id="ApproveModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">x</button>
+                <h4 class="modal-title">Вы уверены, что хотите удалить коллекцию?</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+
