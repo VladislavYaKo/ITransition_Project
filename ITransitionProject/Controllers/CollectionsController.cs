@@ -26,7 +26,7 @@ namespace ITransitionProject.Controllers
         {
             if (userId == null)
                 userId = userManager.GetUserId(User);
-            List<Collection> collections = appContext.Collections.Where(coll => coll.UserId == userId).ToList();
+            List<Collection> collections = appContext.Collections.Where(col => col.UserId == userId).ToList();
             ViewBag.userId = userId;
             return View(collections);
         }
@@ -46,7 +46,7 @@ namespace ITransitionProject.Controllers
             if(ModelState.IsValid)
             {
                 AdditionalFieldsNames afn = new AdditionalFieldsNames(model.intFieldName);
-                Collection newCollection = new Collection { Name = model.Name, Theme = model.Theme, briefDesc = model.BriefDesc, imgUrl = model.ImgUrl, AddFieldsNames = afn };
+                Collection newCollection = new Collection { Name = model.Name, Theme = model.Theme, briefDesc = model.BriefDesc, imgUrl = model.ImgUrl/*, AddFieldsNames = afn*/ };
                 User user = await userManager.FindByIdAsync(model.userId);
                 if (user.Collections == null)
                     user.Collections = new List<Collection>();

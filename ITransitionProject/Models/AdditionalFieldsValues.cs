@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,7 +9,9 @@ namespace ITransitionProject.Models
 {
     public class AdditionalFieldsValues
     {
-        public int Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
+        public Guid Id { get; set; }
         [MaxLength(50)]
         public string NumericFieldsValues { get; set; }
         [MaxLength(800)]

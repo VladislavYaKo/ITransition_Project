@@ -19,6 +19,7 @@ namespace ITransitionProject.Models
         {
             builder.Entity<User>().Property(p => p.intId).ValueGeneratedOnAdd();
             builder.Entity<User>().Property(p => p.intId).Metadata.SetAfterSaveBehavior(Microsoft.EntityFrameworkCore.Metadata.PropertySaveBehavior.Ignore);
+            builder.Entity<Collection>().HasKey(p => new { p.Id, p.UserId });
             base.OnModelCreating(builder);
         }
     }

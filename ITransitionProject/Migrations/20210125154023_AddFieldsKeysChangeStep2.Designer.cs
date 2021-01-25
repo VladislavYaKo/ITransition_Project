@@ -4,14 +4,16 @@ using ITransitionProject.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ITransitionProject.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20210125154023_AddFieldsKeysChangeStep2")]
+    partial class AddFieldsKeysChangeStep2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -19,14 +21,77 @@ namespace ITransitionProject.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.2");
 
+            modelBuilder.Entity("ITransitionProject.Models.AdditionalFieldsNames", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BooleabFieldsNames")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("DateFieldsNames")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("MultiLineFieldsNames")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NumericFieldsNames")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("SingleLineFieldsNames")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AdditionalFieldsNames");
+                });
+
+            modelBuilder.Entity("ITransitionProject.Models.AdditionalFieldsValues", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BooleanFieldsValues")
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<string>("DateFieldsValues")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("MultiLineFieldsValues")
+                        .HasMaxLength(3100)
+                        .HasColumnType("nvarchar(3100)");
+
+                    b.Property<string>("NumericFieldsValues")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("SingleLineFieldsValues")
+                        .HasMaxLength(800)
+                        .HasColumnType("nvarchar(800)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AdditionalFieldsValues");
+                });
+
             modelBuilder.Entity("ITransitionProject.Models.Collection", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
 
-                    b.Property<string>("UserId")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid?>("AddFieldsNamesId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -35,6 +100,10 @@ namespace ITransitionProject.Migrations
 
                     b.Property<int>("Theme")
                         .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("briefDesc")
                         .IsRequired()
@@ -45,7 +114,9 @@ namespace ITransitionProject.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("Id", "UserId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddFieldsNamesId");
 
                     b.HasIndex("UserId");
 
@@ -59,15 +130,11 @@ namespace ITransitionProject.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
+                    b.Property<Guid?>("AddFieldsValuesId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("CollectionId")
                         .HasColumnType("int");
-
-                    b.Property<int>("CollectionId1")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CollectionUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -76,7 +143,9 @@ namespace ITransitionProject.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CollectionId1", "CollectionUserId");
+                    b.HasIndex("AddFieldsValuesId");
+
+                    b.HasIndex("CollectionId");
 
                     b.ToTable("Items");
                 });
@@ -287,20 +356,30 @@ namespace ITransitionProject.Migrations
 
             modelBuilder.Entity("ITransitionProject.Models.Collection", b =>
                 {
+                    b.HasOne("ITransitionProject.Models.AdditionalFieldsNames", "AddFieldsNames")
+                        .WithMany()
+                        .HasForeignKey("AddFieldsNamesId");
+
                     b.HasOne("ITransitionProject.Models.User", null)
                         .WithMany("Collections")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("AddFieldsNames");
                 });
 
             modelBuilder.Entity("ITransitionProject.Models.Item", b =>
                 {
+                    b.HasOne("ITransitionProject.Models.AdditionalFieldsValues", "AddFieldsValues")
+                        .WithMany()
+                        .HasForeignKey("AddFieldsValuesId");
+
                     b.HasOne("ITransitionProject.Models.Collection", null)
                         .WithMany("Items")
-                        .HasForeignKey("CollectionId1", "CollectionUserId")
+                        .HasForeignKey("CollectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("AddFieldsValues");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
