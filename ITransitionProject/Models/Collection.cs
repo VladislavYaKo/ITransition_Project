@@ -38,8 +38,6 @@ namespace ITransitionProject.Models
         public string briefDesc { get; set; }
         public List<Item> Items { get; set; }        
         //public AdditionalFieldsNames AddFieldsNames { get; set; }
-        /*[DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int Id { get; set; }*/ //For coposite key adding
 
     }
 }
