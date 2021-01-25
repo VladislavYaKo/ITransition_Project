@@ -97,7 +97,7 @@ namespace ITransitionProject.Controllers
         public IActionResult ViewCollection(string userId, int colId)
         {
             Collection col = appContext.Collections.FirstOrDefault(c => c.UserId == userId && c.Id == colId);
-            List<Item> items = appContext.Items.Where(i => i.CollectionId == colId).ToList();
+            List<Item> items = appContext.Items/*.Where(i => i.CollectionId == colId)*/.ToList();
             return View(new EditCollectionItemsViewModel(userId, colId, col.Name, EnumHelper.GetEnumDisplayName(col.Theme), items));
         }
 

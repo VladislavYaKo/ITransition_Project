@@ -7,7 +7,7 @@ namespace ITransitionProject.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropPrimaryKey("PK_AdditionalFieldsNames", "AdditionalFieldsNames");
+            /*migrationBuilder.DropPrimaryKey("PK_AdditionalFieldsNames", "AdditionalFieldsNames");
             migrationBuilder.DropPrimaryKey("PK_AdditionalFieldsValues", "AdditionalFieldsValues");
 
             migrationBuilder.DropColumn("Id", "AdditionalFieldsNames");
@@ -22,7 +22,7 @@ namespace ITransitionProject.Migrations
             migrationBuilder.AddPrimaryKey(
                 name: "PK_AdditionalFieldsValues",
                 table: "AdditionalFieldsValues",
-                column: "Id");
+                column: "Id");*/
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

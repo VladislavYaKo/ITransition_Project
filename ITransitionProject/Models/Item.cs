@@ -14,6 +14,7 @@ namespace ITransitionProject.Models
         public string Name { get; set; }
         //Tags
         public int CollectionId { get; set; }
+        public string CollectionUserId { get; set; }
         //public AdditionalFieldsValues AddFieldsValues { get; set; }
     }
 }
