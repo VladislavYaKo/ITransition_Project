@@ -37,7 +37,7 @@ namespace ITransitionProject.Models
         [MaxLength(128)]
         public string briefDesc { get; set; }
         public List<Item> Items { get; set; }        
-        //public AdditionalFieldsNames AddFieldsNames { get; set; }
+        public AdditionalFieldsNames AddFieldsNames { get; set; }
 
     }
 }
