@@ -114,21 +114,7 @@ namespace ITransitionProject.Controllers
             await appContext.SaveChangesAsync();
             ViewBag.userId = userId;
             return View("EditCollections", appContext.Collections.Where(c => c.UserId == userId));
-        }
-        [HttpGet]
-        public IActionResult AddITem(string userId, int colId, string CollectionName, string CollectionTheme)
-        {
-            if (!HasAccess(userId))
-                return StatusCode(403);
-            //TODO
-            return View(new EditCollectionItemsViewModel { userId = userId, colId = colId, CollectionName = CollectionName, CollectionTheme = CollectionTheme });
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> ViewItem()
-        {
-            throw new NotImplementedException();
-        }
+        }              
 
         private int CalculateNewCollectionIndex(string userId)
         {
@@ -137,14 +123,6 @@ namespace ITransitionProject.Controllers
                 return colList.Max(p => p.Id) + 1;
             else
                 return 1;
-        }
-
-        private bool HasAccess(string userId)
-        {
-            if (userId != userManager.GetUserId(User) && !User.IsInRole("admin"))
-                return false;
-            else
-                return true;
-        }
+        }        
     }
 }
