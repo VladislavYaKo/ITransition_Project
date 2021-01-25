@@ -21,7 +21,8 @@
                     <td>@col.briefDesc</td>
                     <td><button class="btn btn-primary" asp-action="ViewCollection" name="colId" value="@col.Id">Просмотреть</button></td>
                     <td><button class="btn" style="color: blueviolet" asp-action="EditCollection" name="colId" value="@col.Id">Редактировать</button></td>
-                    <td><a href="#" class="btn btn-danger" data-toggle="modal" data-target="#ApproveModal">Удалить</a></td> @*asp-controller="" asp-action="" name="colId" value="@col.Id"*@
+                    @*<td><a href="#" class="btn btn-danger" data-toggle="modal" data-target="#ApproveModal">Удалить</a></td>*@ @*asp-controller="" asp-action="" name="colId" value="@col.Id"*@
+                    <td><button class="btn btn-danger" asp-action="DeleteCollection" formmethod="post" name="colId" value="@col.Id">Удалить</button></td>
                 </tr>
             }
     </table>

@@ -22,8 +22,9 @@ namespace ITransitionProject.Models
             [Display(Name = "Одежда")]
             Clothes,
         }
+        [Column(Order = 0)]
         public int Id { get; set; }
-        //public int ForChangeId { get; set; }
+        [Column(Order = 1)]
         [MaxLength(450)]
         public string UserId { get; set; }
         [Required]

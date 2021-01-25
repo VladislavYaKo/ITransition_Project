@@ -46,7 +46,13 @@ namespace ITransitionProject.Controllers
             if(ModelState.IsValid)
             {
                 AdditionalFieldsNames afn = new AdditionalFieldsNames(model.intFieldName);
-                Collection newCollection = new Collection { Name = model.Name, Theme = model.Theme, briefDesc = model.BriefDesc, imgUrl = model.ImgUrl/*, AddFieldsNames = afn*/ };
+                Collection newCollection = new Collection { Id = CalculateNewCollectionIndex(model.userId), 
+                    UserId = model.userId,
+                    Name = model.Name, 
+                    Theme = model.Theme, 
+                    briefDesc = model.BriefDesc, 
+                    imgUrl = model.ImgUrl, 
+                    AddFieldsNames = afn };
                 User user = await userManager.FindByIdAsync(model.userId);
                 if (user.Collections == null)
                     user.Collections = new List<Collection>();
@@ -62,9 +68,9 @@ namespace ITransitionProject.Controllers
         }
 
         [HttpGet]
-        public IActionResult EditCollection(int colId)
+        public IActionResult EditCollection(string userId, int colId)
         {
-            Collection col = appContext.Collections.FirstOrDefault(c => c.Id == colId);
+            Collection col = appContext.Collections.FirstOrDefault(c => c.UserId == userId && c.Id == colId);
             return View(new EditCollectionViewModel { Name= col?.Name, collectionId = colId, userId = col?.UserId, BriefDesc = col?.briefDesc , ImgUrl = col?.imgUrl});
         }
 
@@ -97,21 +103,24 @@ namespace ITransitionProject.Controllers
         public IActionResult ViewCollection(string userId, int colId)
         {
             Collection col = appContext.Collections.FirstOrDefault(c => c.UserId == userId && c.Id == colId);
-            List<Item> items = appContext.Items/*.Where(i => i.CollectionId == colId)*/.ToList();
+            List<Item> items = appContext.Items.Where(i => i.CollectionId == colId).ToList();
             return View(new EditCollectionItemsViewModel(userId, colId, col.Name, EnumHelper.GetEnumDisplayName(col.Theme), items));
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteCollection(int colId)
+        public async Task<IActionResult> DeleteCollection(string userId, int colId)
         {
-            throw new NotImplementedException();
+            appContext.Collections.Remove(appContext.Collections.FirstOrDefault(c => c.UserId == userId && c.Id == colId));
+            await appContext.SaveChangesAsync();
+            ViewBag.userId = userId;
+            return View("EditCollections", appContext.Collections.Where(c => c.UserId == userId));
         }
         [HttpGet]
         public IActionResult AddITem(string userId, int colId, string CollectionName, string CollectionTheme)
         {
-            if (userId != userManager.GetUserId(User) && !User.IsInRole("admin"))
+            if (!HasAccess(userId))
                 return StatusCode(403);
-
+            //TODO
             return View(new EditCollectionItemsViewModel { userId = userId, colId = colId, CollectionName = CollectionName, CollectionTheme = CollectionTheme });
         }
 
@@ -119,6 +128,23 @@ namespace ITransitionProject.Controllers
         public async Task<IActionResult> ViewItem()
         {
             throw new NotImplementedException();
+        }
+
+        private int CalculateNewCollectionIndex(string userId)
+        {
+            List<Collection> colList = appContext.Collections.Where(p => p.UserId == userId).ToList();
+            if (colList.Count > 0)
+                return colList.Max(p => p.Id) + 1;
+            else
+                return 1;
+        }
+
+        private bool HasAccess(string userId)
+        {
+            if (userId != userManager.GetUserId(User) && !User.IsInRole("admin"))
+                return false;
+            else
+                return true;
         }
     }
 }
