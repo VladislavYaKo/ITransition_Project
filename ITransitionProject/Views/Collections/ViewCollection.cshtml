@@ -5,9 +5,9 @@
 <form role="form" method="get">
     <input type="hidden" name="userId" value="@Model.userId" />
     <input type="hidden" name="colId" value="@Model.colId" />
-    <input type="hidden" name="colName" value="@Model.CollectionName" />
-    <input type="hidden" name="colTheme" value="@Model.CollectionTheme" />
-    <button asp-controller="ItemsController" asp-action="AddItem" class="btn btn-success">Добавить</button>
+    <input type="hidden" name="CollectionName" value="@Model.CollectionName" />
+    <input type="hidden" name="CollectionTheme" value="@Model.CollectionTheme" />
+    <button asp-controller="Items" asp-action="AddItem" class="btn btn-success">Добавить</button>
     <table class="table">
         <tr>
             <th></th>

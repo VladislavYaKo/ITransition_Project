@@ -9,6 +9,12 @@ namespace ITransitionProject.Models
 {
     public class AdditionalFieldsValues
     {
+        public AdditionalFieldsValues() { }
+
+        public AdditionalFieldsValues(string[] numericFieldsValues)
+        {
+            this.NumericFieldsValues = numericFieldsValues != null ? String.Join(',', numericFieldsValues) : null;
+        }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public Guid Id { get; set; }

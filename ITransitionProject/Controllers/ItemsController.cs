@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ITransitionProject.Controllers
 {
-    [Authorize(Roles = "user, admin")]
+    [Authorize(Roles = "user,admin")]
     public class ItemsController : Controller
     {
         private readonly UserManager<User> userManager;
@@ -34,9 +34,12 @@ namespace ITransitionProject.Controllers
                 return StatusCode(403);
 
             Collection col = appContext.Collections.FirstOrDefault(c => c.UserId == userId && c.Id == colId);
-            string[] NumericFieldsNames = new string[3];
-            if (col.AddFieldsNames.NumericFieldsNames != null)
+            AdditionalFieldsNames afn = appContext.AdditionalFieldsNames.FirstOrDefault(a => a.Id == col.AddFieldsNamesId);
+            string[] NumericFieldsNames;
+            if (afn.NumericFieldsNames != null)
                 NumericFieldsNames = col.AddFieldsNames.NumericFieldsNames.Split(',');
+            else
+                NumericFieldsNames = new string[0];
 
             return View(new EditItemViewModel { 
                 UserId = userId, 
@@ -44,8 +47,40 @@ namespace ITransitionProject.Controllers
                 CollectionName = CollectionName, 
                 CollectionTheme = CollectionTheme, 
                 NumericFieldsNames = NumericFieldsNames,
-                NumericFieldsValues = new string[3]
+                NumericFieldsValues = new string[NumericFieldsNames.Length]
             });
+        }
+
+        [HttpPost]
+        public async Task< IActionResult >AddItem(EditItemViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                AdditionalFieldsValues afv = new AdditionalFieldsValues(model.NumericFieldsValues);
+                Item newItem = new Item
+                {
+                    Name = model.Name,
+                    Id = CalculateNewItemIndex(model.UserId, model.CollectionId),
+                    CollectionId = model.CollectionId,
+                    CollectionUserId = model.UserId,
+                    AddFieldsValues = afv
+                };
+                await appContext.Items.AddAsync(newItem);
+                return RedirectToAction("ViewCollection", "Collections", new { userId = model.UserId, colId = model.CollectionId });
+            }
+            else
+                ModelState.AddModelError("", "Некорректно заполнены поля.");
+
+            return View(model);
+        }
+
+        private int CalculateNewItemIndex(string userId, int collectionId)
+        {
+            List<Item> items = appContext.Items.Where(i => i.CollectionUserId == userId && i.CollectionId == collectionId).ToList();
+            if (items.Count > 0)
+                return items.Max(i => i.Id) + 1;
+            else
+                return 1;
         }
     }
 }

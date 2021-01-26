@@ -39,6 +39,8 @@ namespace ITransitionProject.Models
         public string briefDesc { get; set; }
         public List<Item> Items { get; set; }        
         public AdditionalFieldsNames AddFieldsNames { get; set; }
+        [ForeignKey("AddFieldsNames")]
+        public Guid AddFieldsNamesId { get; set; }
 
     }
 }

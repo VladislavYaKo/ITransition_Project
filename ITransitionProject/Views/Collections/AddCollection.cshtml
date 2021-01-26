@@ -25,13 +25,13 @@
         <input asp-for="ImgUrl" />
         <span asp-validation-for="ImgUrl"></span>
     </div>
-    <div id="additional-fields">
-        <div id="int-div-template" style="display: none">
+    <div id="additional-fields-container">
+        @*<div id="int-div-template" style="display: none">
             <label id="label">Название числового поля</label>
             <br />
             <input id="input" type="number" maxlength="20" name="intFieldName" disabled="disabled"/>
             <br />
-        </div>
+        </div>*@
     </div>
     <input type="button" class="btn" style="color: brown" name="AddIntField" onclick="AddIntFieldClick()" value="Добавить числовое поле">
     <input type="button" class="btn btn-danger" name="DelIntField" onclick="DelIntFieldClick()" value="Удалить числовое поле"><br />
@@ -45,14 +45,14 @@
     <script>
         var intFieldsNum = 0;
         var doc = document;
-        @*function AddIntFieldClick() {
+        function AddIntFieldClick() {
             if (intFieldsNum >= 3) {
                 alert('Вы не можете создать больше трёх полей!');
                 return;
             }
 
             intFieldsNum++;
-            let addFields = doc.getElementById('additional-fields'),
+            let addFields = doc.getElementById('additional-fields-container'),
                 elemDiv = doc.createElement('div');
                 elemNameLabel = doc.createElement('label'),
                 elemNameInput = doc.createElement('input'),
@@ -60,12 +60,12 @@
 
             elemDiv.id = 'int-div-' + intFieldsNum;
             elemNameLabel.setAttribute('for', 'int-field-' + intFieldsNum);
-            elemNameLabel.id = 'int-label-field-' + intFieldsNum;
+            elemNameLabel.id = 'int-field-label-' + intFieldsNum;
             elemNameLabel.innerHTML = 'Название числового поля';
-            elemNameInput.type = 'number';
+            elemNameInput.type = 'text';
             elemNameInput.maxLength = 20;
             elemNameInput.id = 'int-field-' + intFieldsNum;
-            elemNameInput.name = 'intFieldName';
+            elemNameInput.name = 'NumericFieldName';
             elemNameInput.setAttribute('required', '');
 
             elemDiv.appendChild(elemBr);
@@ -74,9 +74,9 @@
             elemDiv.appendChild(elemNameInput);
             elemDiv.appendChild(elemBr);
             addFields.appendChild(elemDiv);
-        }*@
+        }
 
-        function AddIntFieldClick() {
+        @*function AddIntFieldClick() {
             if (intFieldsNum >= 3) {
                 alert('Вы не можете создать больше трёх полей!');
                 return;
@@ -84,25 +84,23 @@
 
             intFieldsNum++;
             let elemDiv = doc.getElementById('int-div-template'),
-                @*elemLabel = doc.getElementById('label'),
-                elemInput = doc.getElementById('input'),*@
+                elemLabel = doc.getElementById('label'),
+                elemInput = doc.getElementById('input'),
                 elemNewDiv = elemDiv.cloneNode(true);
-                //elemDivLabel = doc.getElementById('label').cloneNode(false),
-                @*elemDivLabel = elemLabel.cloneNode(false),
-                elemDivInput = elemInput.cloneNode(false);*@
+                elemDivLabel = elemLabel.cloneNode(false),
+                elemDivInput = elemInput.cloneNode(false);
 
             elemNewDiv.setAttribute('style', '');
             elemNewDiv.setAttribute('id', 'int-div-' + intFieldsNum);
             console.log(elemDiv.childNodes);
-            //
-            @*elemDivLabel.setAttribute('for', 'int-field-' + intFieldsNum);
+            elemDivLabel.setAttribute('for', 'int-field-' + intFieldsNum);
             alert(elemNewDiv.childNodes.length);
             elemNewDiv.childNodes[0] = elemDivLabel;
             elemDivInput.setAttribute('required', '');
             elemDivInput.setAttribute('disabled', '');
             elemNewDiv.childNodes[2] = elemDivInput;
-            elemDiv.parentNode.appendChild(elemNewDiv);*@
-        }
+            elemDiv.parentNode.appendChild(elemNewDiv);
+        }*@
 
         function DelIntFieldClick() {
             if (intFieldsNum <= 0)

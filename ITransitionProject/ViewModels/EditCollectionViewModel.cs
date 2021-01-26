@@ -21,6 +21,6 @@ namespace ITransitionProject.ViewModels
         public string BriefDesc { get; set; }
         [MaxLength(100)]
         public string ImgUrl { get; set; }
-        public string[] intFieldName { get; set; }
+        public string[] NumericFieldName { get; set; }
     }
 }

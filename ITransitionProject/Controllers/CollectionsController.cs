@@ -45,7 +45,7 @@ namespace ITransitionProject.Controllers
         {
             if(ModelState.IsValid)
             {
-                AdditionalFieldsNames afn = new AdditionalFieldsNames(model.intFieldName);
+                AdditionalFieldsNames afn = new AdditionalFieldsNames(model.NumericFieldName);
                 Collection newCollection = new Collection { Id = CalculateNewCollectionIndex(model.userId), 
                     UserId = model.userId,
                     Name = model.Name, 
