@@ -1,0 +1,16 @@
+﻿@model ITransitionProject.ViewModels.EditItemViewModel
+
+<h2>@Model.CollectionName: @Model.CollectionTheme.</h2>
+<br />
+<div>
+    <span>Имя: @Model.Name</span>
+</div>
+<div>
+    <span>Тэги: </span>
+</div>
+@for (int i = 0; i < Model.NumericFieldsNames?.Length; i++)
+{
+    <div>
+        <span>@Model.NumericFieldsNames[i]: @Model.NumericFieldsValues[i]</span>
+    </div>
+}

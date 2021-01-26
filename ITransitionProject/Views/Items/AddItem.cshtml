@@ -1,7 +1,7 @@
 ﻿@model ITransitionProject.ViewModels.EditItemViewModel
 
 <h2>@Model.CollectionName: @Model.CollectionTheme </h2>
-<form method="post">
+<form method="post" asp-action="AddItem">
     <div asp-validation-summary="ModelOnly"></div>
     <input type="hidden" name="UserId" value="@Model.UserId" />
     <input type="hidden" name="CollectionId" value="@Model.CollectionId" />
@@ -15,9 +15,8 @@
     @for (int i = 0; i < Model.NumericFieldsNames?.Length; i++)
     {
         <label>
-            @Model.NumericFieldsNames[i]<br />
-            <input asp-for="NumericFieldsNames[i]" />: <input type="number" name="NumericFieldsValues" value="@Model.NumericFieldsValues[i]" /><br />
-        </label>
+            @Model.NumericFieldsNames[i]: <input type="number" name="NumericFieldsValues" value="@Model.NumericFieldsValues[i]" />
+        </label><br />
         <input type="hidden" name="NumericFieldsNames" value="@Model.NumericFieldsNames[i]" />
     }
     <input type="submit" class="btn btn-success" value="Добавить" />

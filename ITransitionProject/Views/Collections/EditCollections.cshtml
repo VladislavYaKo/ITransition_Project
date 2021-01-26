@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Collection>
+﻿@using ITransitionProject.ViewModels
+@model IEnumerable<UserCollectionsViewModel>
 
 <form method="get">
     <input type="hidden" name="userId" value="@ViewBag.userId" />
@@ -13,16 +14,16 @@
             <th></th>
         </tr>
         @if (Model != null)
-            foreach (Collection col in Model)
+            foreach (UserCollectionsViewModel pair in Model)
             {
                 <tr>
-                    <td>@col.Name</td>
-                    <td>@col.Theme.ToString()</td>
-                    <td>@col.briefDesc</td>
-                    <td><button class="btn btn-primary" asp-action="ViewCollection" name="colId" value="@col.Id">Просмотреть</button></td>
-                    <td><button class="btn" style="color: blueviolet" asp-action="EditCollection" name="colId" value="@col.Id">Редактировать</button></td>
+                    <td>@pair.Collection.Name</td>
+                    <td>@pair.Theme</td>
+                    <td>@pair.Collection.briefDesc</td>
+                    <td><button class="btn btn-primary" asp-action="ViewCollection" name="collectionId" value="@pair.Collection.Id">Просмотреть</button></td>
+                    <td><button class="btn" style="color: blueviolet" asp-action="EditCollection" name="collectionId" value="@pair.Collection.Id">Редактировать</button></td>
                     @*<td><a href="#" class="btn btn-danger" data-toggle="modal" data-target="#ApproveModal">Удалить</a></td>*@ @*asp-controller="" asp-action="" name="colId" value="@col.Id"*@
-                    <td><button class="btn btn-danger" asp-action="DeleteCollection" formmethod="post" name="colId" value="@col.Id">Удалить</button></td>
+                    <td><button class="btn btn-danger" asp-action="DeleteCollection" formmethod="post" name="collectionId" value="@pair.Collection.Id">Удалить</button></td>
                 </tr>
             }
     </table>

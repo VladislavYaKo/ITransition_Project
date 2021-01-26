@@ -28,5 +28,10 @@ namespace ITransitionProject.Models
         public string DateFieldsValues { get; set; }
         [MaxLength(40)]
         public string BooleanFieldsValues { get; set; }
+
+        public string[] GetNumericValuesArray()
+        {
+            return NumericFieldsValues != null ? NumericFieldsValues.Split(',') : null;
+        }
     }
 }

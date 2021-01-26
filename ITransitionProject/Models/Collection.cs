@@ -41,6 +41,5 @@ namespace ITransitionProject.Models
         public AdditionalFieldsNames AddFieldsNames { get; set; }
         [ForeignKey("AddFieldsNames")]
         public Guid AddFieldsNamesId { get; set; }
-
     }
 }

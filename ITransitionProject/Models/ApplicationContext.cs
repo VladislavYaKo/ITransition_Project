@@ -12,7 +12,7 @@ namespace ITransitionProject.Models
         public DbSet<Collection> Collections { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<AdditionalFieldsNames> AdditionalFieldsNames { get; set; }
-        public DbSet<AdditionalFieldsNames> AdditionalFieldsValues { get; set; }
+        public DbSet<AdditionalFieldsValues> AdditionalFieldsValues { get; set; }
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
         }

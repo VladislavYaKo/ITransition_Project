@@ -3,13 +3,14 @@
 <table class="table">
     <tr>
         <th>Имя</th>
+        <th></th>
     </tr>
     @{
         foreach (User user in Model)
         {
             <tr>
                 <td>@user.NotLoginName</td>
-                <td><a asp-action="UserCollections" asp-route-ViewUserIntId="@user.intId" class="btn btn-primary">Просмотреть</a></td>
+                <td><a asp-action="UserCollections" asp-route-userId="@user.Id" class="btn btn-primary">Просмотреть</a></td>
             </tr>
         }
     }

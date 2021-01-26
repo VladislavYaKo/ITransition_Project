@@ -3,8 +3,8 @@
 <h2>@Model.CollectionName: @Model.CollectionTheme.</h2>
 <br />
 <form role="form" method="get">
-    <input type="hidden" name="userId" value="@Model.userId" />
-    <input type="hidden" name="colId" value="@Model.colId" />
+    <input type="hidden" name="UserId" value="@Model.UserId" />
+    <input type="hidden" name="CollectionId" value="@Model.CollectionId" />
     <input type="hidden" name="CollectionName" value="@Model.CollectionName" />
     <input type="hidden" name="CollectionTheme" value="@Model.CollectionTheme" />
     <button asp-controller="Items" asp-action="AddItem" class="btn btn-success">Добавить</button>
@@ -12,6 +12,10 @@
         <tr>
             <th></th>
             <th>Название</th>
+            <th>Дополнительные поля: @ViewBag.AdditionalFieldsNames</th>
+            <th></th>
+            <th></th>
+            <th></th>
         </tr>
         @{
             int i = 1;
@@ -20,8 +24,9 @@
                 <tr>
                     <td>@i. </td>
                     <td>@item.Name</td>
-                    <td><button asp-controller="" asp-action="" class="btn btn-primary text-sm-center">Просмотреть</button></td>
-                    <td><button asp-controller="" asp-action="" class="btn" style="color: antiquewhite">Редактировать</button></td>
+                    <td></td>
+                    <td><button asp-controller="Items" asp-action="ViewItem" class="btn btn-primary text-sm-center" name="itemId" value="@item.Id">Просмотреть</button></td>
+                    <td><button asp-controller="" asp-action="" class="btn" style="color: brown">Редактировать</button></td>
                     <td><button asp-controller="" asp-action="" class="btn btn-danger">Удалить</button></td>
                 </tr>
             }

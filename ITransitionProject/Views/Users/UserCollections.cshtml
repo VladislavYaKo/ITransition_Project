@@ -1,27 +1,26 @@
-﻿@model IEnumerable<Collection>
+﻿@using ITransitionProject.ViewModels
+@model IEnumerable<UserCollectionsViewModel>
 
 <form role="form" method="post" asp-action="UserCollection">
+    <input type="hidden" name="userId" value="@ViewBag.userId" />
     <table class="table">
         <tr>
             <th>Название</th>
             <th>Тема</th>
+            <th></th>
         </tr>
         @{
             if (Model != null)
-                foreach (Collection col in Model)
+                foreach (UserCollectionsViewModel pair in Model)
                 {
                     <tr>
-                        <td>@col.Name</td>
-                        <td>@col.Theme.ToString()</td>
-                        @if (!string.IsNullOrEmpty(col.imgUrl))
+                        <td>@pair.Collection.Name</td>
+                        <td>@pair.Theme</td>
+                        @if (!string.IsNullOrEmpty(pair.Collection.imgUrl))
                         {
-                            <td><img src="@col.imgUrl" class="img-fluid" /></td>
-                        }
-                        else
-                        {
-
-                        }                    
-                        <td><button class="btn btn-primary" name="ViewCollectionId" value="@col.Id">Просмотреть</button></td>
+                            <td><img src="@pair.Collection.imgUrl" class="img-fluid" /></td>
+                        }                   
+                        <td><button class="btn btn-primary" name="collectionId" value="@pair.Collection.Id">Просмотреть</button></td>
                     </tr>
                 }
         }

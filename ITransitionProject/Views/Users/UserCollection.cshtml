@@ -1,17 +1,28 @@
-﻿@model IEnumerable<Item>
+﻿@model ITransitionProject.ViewModels.EditCollectionItemsViewModel
 
-<table class="table">
-    <tr>
-        <th>Название</th>
-    </tr>
-    @{
-        if (Model != null)
-            foreach (Item item in Model)
-            {
-                <tr>
-                    <td>@item.Name</td>
-                    <td><button class="btn btn-primary" name="ViewCollectionId" value="@item.Id">Просмотреть</button></td>
-                </tr>
-            }
-    }
-</table>
+<h2>@Model.CollectionName: @Model.CollectionTheme.</h2>
+<br />
+<form role="form" method="get">
+    <input type="hidden" name="userId" value="@Model.UserId" />
+    <input type="hidden" name="collectionId" value="@Model.CollectionId" />
+    <input type="hidden" name="CollectionName" value="@Model.CollectionName" />
+    <input type="hidden" name="CollectionTheme" value="@Model.CollectionTheme" />
+    <table class="table">
+        <tr>
+            <th>Название</th>
+            <th>Дополнительные поля: @ViewBag.AdditionalFieldsNames</th>
+            <th></th>
+        </tr>
+        @{
+            if (Model != null)
+                foreach (Item item in Model.Items)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td></td>
+                        <td><button asp-controller="Items" asp-action="ViewItem" class="btn btn-primary" name="itemId" value="@item.Id">Просмотреть</button></td>
+                    </tr>
+                }
+        }
+    </table>
+</form>

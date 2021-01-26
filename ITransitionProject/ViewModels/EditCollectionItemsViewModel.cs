@@ -11,14 +11,14 @@ namespace ITransitionProject.ViewModels
         public EditCollectionItemsViewModel() { }
         public EditCollectionItemsViewModel(string userId, int colId, string colName, string colTheme, List<Item> items)
         {
-            this.userId = userId;
-            this.colId = colId;
+            this.UserId = userId;
+            this.CollectionId = colId;
             this.CollectionName = colName;
             this.CollectionTheme = colTheme;
             this.Items = items;
         }
-        public string userId { get; set; }
-        public int colId { get; set; }
+        public string UserId { get; set; }
+        public int CollectionId { get; set; }
         public string CollectionName { get; set; }
         public string CollectionTheme { get; set; }
         public List<Item> Items { get; set; }

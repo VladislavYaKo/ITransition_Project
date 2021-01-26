@@ -22,18 +22,33 @@ namespace ITransitionProject.Controllers
             this.appContext = appContext;
         }
         [HttpGet]
-        public async Task<IActionResult> ViewItem()
+        [AllowAnonymous]
+        public IActionResult ViewItem(EditCollectionItemsViewModel model, int itemId)
         {
-            throw new NotImplementedException();
+            Collection col = appContext.Collections.FirstOrDefault(c => c.UserId == model.UserId && c.Id == model.CollectionId);
+            Item item = appContext.Items.FirstOrDefault(i => i.CollectionUserId == model.UserId && i.Id == itemId);
+            AdditionalFieldsNames afn = appContext.AdditionalFieldsNames.FirstOrDefault(a => a.Id == col.AddFieldsNamesId);
+            AdditionalFieldsValues afv = appContext.AdditionalFieldsValues.FirstOrDefault(a => a.Id == item.AddFieldsValuesId);
+            return View(new EditItemViewModel
+            {
+                Name = item.Name,
+                UserId = model.UserId,
+                CollectionId = model.CollectionId,
+                CollectionName = model.CollectionName,
+                CollectionTheme = model.CollectionTheme,
+                NumericFieldsNames = afn.GetNumericFieldsArray(),
+                NumericFieldsValues = afv.GetNumericValuesArray()
+            }
+            );
         }
 
         [HttpGet]
-        public IActionResult AddItem(string userId, int colId, string CollectionName, string CollectionTheme)
+        public IActionResult AddItem(string UserId, int CollectionId, string CollectionName, string CollectionTheme)
         {
-            if (!CommonHelpers.HasAccess(userId, userManager.GetUserId(User), User))
+            if (!CommonHelpers.HasAccess(UserId, userManager.GetUserId(User), User))
                 return StatusCode(403);
 
-            Collection col = appContext.Collections.FirstOrDefault(c => c.UserId == userId && c.Id == colId);
+            Collection col = appContext.Collections.FirstOrDefault(c => c.UserId == UserId && c.Id == CollectionId);
             AdditionalFieldsNames afn = appContext.AdditionalFieldsNames.FirstOrDefault(a => a.Id == col.AddFieldsNamesId);
             string[] NumericFieldsNames;
             if (afn.NumericFieldsNames != null)
@@ -42,8 +57,8 @@ namespace ITransitionProject.Controllers
                 NumericFieldsNames = new string[0];
 
             return View(new EditItemViewModel { 
-                UserId = userId, 
-                CollectionId = colId, 
+                UserId = UserId, 
+                CollectionId = CollectionId, 
                 CollectionName = CollectionName, 
                 CollectionTheme = CollectionTheme, 
                 NumericFieldsNames = NumericFieldsNames,
@@ -52,7 +67,7 @@ namespace ITransitionProject.Controllers
         }
 
         [HttpPost]
-        public async Task< IActionResult >AddItem(EditItemViewModel model)
+        public async Task<IActionResult> AddItem(EditItemViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -60,13 +75,14 @@ namespace ITransitionProject.Controllers
                 Item newItem = new Item
                 {
                     Name = model.Name,
-                    Id = CalculateNewItemIndex(model.UserId, model.CollectionId),
+                    Id = CalculateNewItemIndex(model.UserId),
                     CollectionId = model.CollectionId,
                     CollectionUserId = model.UserId,
                     AddFieldsValues = afv
                 };
                 await appContext.Items.AddAsync(newItem);
-                return RedirectToAction("ViewCollection", "Collections", new { userId = model.UserId, colId = model.CollectionId });
+                await appContext.SaveChangesAsync();
+                return RedirectToAction("ViewCollection", "Collections", new { userId = model.UserId, collectionId = model.CollectionId });
             }
             else
                 ModelState.AddModelError("", "Некорректно заполнены поля.");
@@ -74,9 +90,9 @@ namespace ITransitionProject.Controllers
             return View(model);
         }
 
-        private int CalculateNewItemIndex(string userId, int collectionId)
+        private int CalculateNewItemIndex(string userId)
         {
-            List<Item> items = appContext.Items.Where(i => i.CollectionUserId == userId && i.CollectionId == collectionId).ToList();
+            List<Item> items = appContext.Items.Where(i => i.CollectionUserId == userId).ToList();
             if (items.Count > 0)
                 return items.Max(i => i.Id) + 1;
             else

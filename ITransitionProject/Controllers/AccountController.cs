@@ -75,7 +75,8 @@ namespace ITransitionProject.Controllers
                 }
                 else
                 {
-                    if (await userManager.IsLockedOutAsync(await userManager.FindByEmailAsync(model.Email)))
+                    User user = await userManager.FindByEmailAsync(model.Email);
+                    if (user != null ? await userManager.IsLockedOutAsync(user) : false)
                         ModelState.AddModelError("", "Вы заблокированны. Обратитесь к администратору");
                     else
                         ModelState.AddModelError("", "Неправильный логин или пароль");

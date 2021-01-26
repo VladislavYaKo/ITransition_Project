@@ -21,5 +21,15 @@ namespace ITransitionProject.Helpers
             else
                 return true;
         }
+
+        public static IEnumerable<UserCollectionsViewModel> MakeUpUserCollectionsViewModel(string userId, ApplicationContext appContext)
+        {
+            List<UserCollectionsViewModel> model = new List<UserCollectionsViewModel>();
+            foreach (Collection col in appContext.Collections.Where(col => col.UserId == userId))
+            {
+                model.Add(new UserCollectionsViewModel(col, EnumHelper.GetEnumDisplayName(col.Theme)));
+            }
+            return model;
+        }
     }
 }
