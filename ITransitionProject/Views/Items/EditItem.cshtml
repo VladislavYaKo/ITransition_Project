@@ -1,0 +1,31 @@
+﻿@model ITransitionProject.ViewModels.EditItemViewModel
+
+<h2>@Model.CollectionName: @Model.CollectionTheme </h2>
+<form method="post" asp-action="EditItem">
+    <div asp-validation-summary="ModelOnly"></div>
+    <input type="hidden" name="UserId" value="@Model.UserId" />
+    <input type="hidden" name="CollectionId" value="@Model.CollectionId" />
+    <input type="hidden" name="CollectionName" value="@Model.CollectionName" />
+    <input type="hidden" name="CollectionTheme" value="@Model.CollectionTheme" />
+    <input type="hidden" name="itemId" value="@Model.ItemId" />
+    <div>
+        <label asp-for="Name"></label><br />
+        <input asp-for="Name" />
+        <span asp-validation-for="Name"></span>
+    </div>
+    @for (int i = 0; i < Model.NumericFieldsNames?.Length; i++)
+    {
+        <label>
+            @Model.NumericFieldsNames[i]: <input type="number" name="NumericFieldsValues" value="@Model.NumericFieldsValues?[i]" />
+        </label><br />
+        <input type="hidden" name="NumericFieldsNames" value="@Model.NumericFieldsNames[i]" />
+    }
+    <button class="btn" style="color: darkred" formmethod="get" asp-controller="Collections" asp-action="ViewCollection">Отмена</button>
+    <input type="submit" class="btn btn-success" value="Сохранить" />
+</form>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial");
+}
+
+

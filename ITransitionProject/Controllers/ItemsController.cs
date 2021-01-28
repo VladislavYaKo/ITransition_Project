@@ -90,6 +90,65 @@ namespace ITransitionProject.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> DeleteItem(EditCollectionItemsViewModel model, int itemId)
+        {
+            if (!CommonHelpers.HasAccess(model.UserId, userManager.GetUserId(User), User))
+                return StatusCode(403);
+
+            appContext.Items.Remove(appContext.Items.FirstOrDefault(i => i.CollectionUserId == model.UserId && i.Id == itemId));
+            await appContext.SaveChangesAsync();
+            return RedirectToAction("ViewCollection", "Collections", new { userId = model.UserId, collectionId = model.CollectionId });
+        }
+
+        [HttpGet]
+        public IActionResult EditItem(EditCollectionItemsViewModel model, int itemId)
+        {
+            if (!CommonHelpers.HasAccess(model.UserId, userManager.GetUserId(User), User))
+                return StatusCode(403);
+
+            Collection col = appContext.Collections.FirstOrDefault(c => c.UserId == model.UserId && c.Id == model.CollectionId);
+            Item item = appContext.Items.FirstOrDefault(i => i.CollectionUserId == model.UserId && i.Id == itemId);
+            string[] NumericFieldsNames = null;
+            if (col.AddFieldsNamesId != Guid.Empty)
+            {
+                AdditionalFieldsNames afn = appContext.AdditionalFieldsNames.FirstOrDefault(a => a.Id == col.AddFieldsNamesId);
+                if (afn.NumericFieldsNames != null)
+                    NumericFieldsNames = afn.GetNumericFieldsArray();//col.AddFieldsNames.NumericFieldsNames.Split(',');
+            }
+            string[] NumericFieldsValues = null;
+            if (col.AddFieldsNamesId != Guid.Empty)
+            {
+                AdditionalFieldsValues afv = appContext.AdditionalFieldsValues.FirstOrDefault(a => a.Id == item.AddFieldsValuesId);
+                if (afv.NumericFieldsValues != null)
+                    NumericFieldsValues = afv.GetNumericValuesArray();
+            }
+            
+
+            return View(new EditItemViewModel
+            {
+                UserId = model.UserId,
+                CollectionId = model.CollectionId,
+                ItemId = itemId,
+                Name = item.Name,
+                CollectionName = model.CollectionName,
+                CollectionTheme = model.CollectionTheme,
+                NumericFieldsNames = NumericFieldsNames,
+                NumericFieldsValues = NumericFieldsValues
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditItem(EditItemViewModel model)
+        {
+            Item item = appContext.Items.FirstOrDefault(i => i.CollectionUserId == model.UserId && i.Id == model.ItemId);
+            item.Name = model.Name;
+            item.AddFieldsValues = new AdditionalFieldsValues(model.NumericFieldsValues);
+            appContext.Items.Update(item);
+            await appContext.SaveChangesAsync();
+            return RedirectToAction("ViewCollection", "Collections", new { userId = model.UserId, collectionId = model.CollectionId });
+        }
+
         private int CalculateNewItemIndex(string userId)
         {
             List<Item> items = appContext.Items.Where(i => i.CollectionUserId == userId).ToList();

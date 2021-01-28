@@ -12,11 +12,12 @@ namespace ITransitionProject.ViewModels
         public string UserId { get; set; }
         [Required]
         public int CollectionId { get; set; }
+        public int ItemId { get; set; }
         [Required]
         public string Name { get; set; }
         public string CollectionName { get; set; }
         public string CollectionTheme { get; set; }
         public string[] NumericFieldsNames { get; set; }
-        public string[] NumericFieldsValues { get; set; }
+        public string[] NumericFieldsValues { get; set; }       
     }
 }
