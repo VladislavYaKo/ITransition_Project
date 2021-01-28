@@ -4,6 +4,7 @@
   "private": true,
   "devDependencies": {},
   "dependencies": {
-    "@yaireo/tagify": "^3.22.1"
+    "@yaireo/tagify": "^3.22.1",
+    "prop-types": "^15.7.2"
   }
 }
