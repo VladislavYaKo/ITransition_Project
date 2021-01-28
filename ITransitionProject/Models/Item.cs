@@ -21,5 +21,6 @@ namespace ITransitionProject.Models
         public AdditionalFieldsValues AddFieldsValues { get; set; }
         [ForeignKey("AddFieldsValues")]
         public Guid AddFieldsValuesId { get; set; }
+        public List<Tag> Tags { get; set; }
     }
 }

@@ -13,6 +13,8 @@ namespace ITransitionProject.Models
         public DbSet<Item> Items { get; set; }
         public DbSet<AdditionalFieldsNames> AdditionalFieldsNames { get; set; }
         public DbSet<AdditionalFieldsValues> AdditionalFieldsValues { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<UniqueTag> UniqueTags { get; set; }
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
         }
@@ -23,6 +25,7 @@ namespace ITransitionProject.Models
             builder.Entity<User>().Property(p => p.intId).Metadata.SetAfterSaveBehavior(Microsoft.EntityFrameworkCore.Metadata.PropertySaveBehavior.Ignore);
             builder.Entity<Collection>().HasKey(p => new { p.Id, p.UserId });
             builder.Entity<Item>().HasKey(p => new { p.Id, p.CollectionUserId });
+            builder.Entity<Tag>().HasKey(p => new { p.ItemCollectionUserId, p.ItemId, p.TagValue });
             base.OnModelCreating(builder);
         }
     }

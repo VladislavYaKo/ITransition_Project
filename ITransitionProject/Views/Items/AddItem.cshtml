@@ -12,10 +12,14 @@
         <input asp-for="Name" />
         <span asp-validation-for="Name"></span>
     </div>
+    <div>
+        <label>Тэги</label><br />
+        <input type="text" id="tags-input"/>
+    </div>
     @for (int i = 0; i < Model.NumericFieldsNames?.Length; i++)
     {
         <label>
-            @Model.NumericFieldsNames[i]: <input type="number" name="NumericFieldsValues" value="@Model.NumericFieldsValues[i]" />
+            @Model.NumericFieldsNames[i]: <input type="number" name="NumericFieldsValues" value="@Model.NumericFieldsValues[i]" maxlength="15"/>
         </label><br />
         <input type="hidden" name="NumericFieldsNames" value="@Model.NumericFieldsNames[i]" />
     }
@@ -24,6 +28,15 @@
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial");
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/3.22.1/tagify.min.js"
+        asp-fallback-src="~/@@yaireo/tagify/dist/tagify.min.js"></script>
+<script>
+    
+    var input = document.getElementById('tags-input');
+    var tagify = new Tagify(input, {
+        whitelist: ["Tag1", "Tag2", "Tag3"]
+    })
+</script>
 }
 
 

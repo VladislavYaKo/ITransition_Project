@@ -16,7 +16,7 @@
     @for (int i = 0; i < Model.NumericFieldsNames?.Length; i++)
     {
         <label>
-            @Model.NumericFieldsNames[i]: <input type="number" name="NumericFieldsValues" value="@Model.NumericFieldsValues?[i]" />
+            @Model.NumericFieldsNames[i]: <input type="number" name="NumericFieldsValues" value="@Model.NumericFieldsValues?[i]" maxlength="15"/>
         </label><br />
         <input type="hidden" name="NumericFieldsNames" value="@Model.NumericFieldsNames[i]" />
     }
