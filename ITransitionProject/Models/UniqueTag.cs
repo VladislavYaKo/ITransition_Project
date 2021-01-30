@@ -12,5 +12,8 @@ namespace ITransitionProject.Models
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Key]
         public string TagValue { get; set; }
+
+        public UniqueTag() { }
+        public UniqueTag(string tag) => this.TagValue = tag;
     }
 }

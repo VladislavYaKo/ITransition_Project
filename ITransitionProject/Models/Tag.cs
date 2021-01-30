@@ -13,5 +13,8 @@ namespace ITransitionProject.Models
         [MinLength(1)]
         [MaxLength(30)]
         public string TagValue { get; set; }
+
+        public Tag() { }
+        public Tag(string tag) => this.TagValue = tag;
     }
 }

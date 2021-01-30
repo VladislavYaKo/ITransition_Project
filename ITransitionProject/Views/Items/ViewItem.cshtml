@@ -1,16 +1,34 @@
 ﻿@model ITransitionProject.ViewModels.EditItemViewModel
 
-<h2>@Model.CollectionName: @Model.CollectionTheme.</h2>
+<h2>Коллекция @Model.CollectionName. Тема @Model.CollectionTheme.</h2>
 <br />
 <div>
     <span>Имя: @Model.Name</span>
 </div>
 <div>
     <span>Тэги: </span>
+    <input id="Tags" readonly />
 </div>
 @for (int i = 0; i < Model.NumericFieldsNames?.Length; i++)
 {
     <div>
         <span>@Model.NumericFieldsNames[i]: @Model.NumericFieldsValues[i]</span>
     </div>
+}
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/3.22.1/tagify.min.js"
+            asp-fallback-src="~/@@yaireo/tagify/dist/tagify.min.js"></script>
+    <script>
+        let tagsSpan = document.getElementById('Tags'),
+            tagify = new Tagify(tagsSpan),
+            jsonItemTags = "@Model.JsonTags",
+            itemTags = JSON.parse(jsonItemTags.replace(/(&quot\;)/g, "\""));
+        tagify.addTags(itemTags);
+        tagify.on('click', onTagClick);
+
+        function onTagClick(e) {
+            window.location.href = "TagFoundResult?search=" + e.detail.data.value;
+        }
+    </script>
 }

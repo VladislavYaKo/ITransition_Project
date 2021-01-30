@@ -1,8 +1,28 @@
-﻿@{
+﻿@using ITransitionProject.ViewModels
+@model IndexViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <textarea id="tags-cloud" readonly></textarea>
 </div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/3.22.1/tagify.min.js"
+            asp-fallback-src="~/@@yaireo/tagify/dist/tagify.min.js"></script>
+    <script>
+        let tagsCloudArea = document.getElementById('tags-cloud'),
+            tagify = new Tagify(tagsCloudArea),
+            jsonTagsCloud = '@Model.JsonTagsCloud',
+            tagsCloud = JSON.parse(jsonTagsCloud.replace(/(&quot\;)/g, "\""));
+        tagify.addTags(tagsCloud);
+        tagify.on('click', onTagClick);
+
+        function onTagClick(e) {
+            let addr = window.location;
+            let baseAddr = addr.protocol + "//" + addr.host + "/";
+            window.location.href = baseAddr + "Items/TagFoundResult?search=" + e.detail.data.value;
+        }
+    </script>
+}

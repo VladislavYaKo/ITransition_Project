@@ -1,6 +1,7 @@
 ﻿@using ITransitionProject.ViewModels
 @model IEnumerable<UserCollectionsViewModel>
 
+<h2>Коллекции</h2>
 <form method="get">
     <input type="hidden" name="userId" value="@ViewBag.userId" />
     <button class="btn btn-primary" asp-controller="Collections" asp-action="AddCollection" name="userId" value="@ViewBag.userId">Добавить</button>    

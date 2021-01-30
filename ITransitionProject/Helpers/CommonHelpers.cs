@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Security.Claims;
+using Newtonsoft.Json;
 
 namespace ITransitionProject.Helpers
 {
@@ -30,6 +31,12 @@ namespace ITransitionProject.Helpers
                 model.Add(new UserCollectionsViewModel(col, EnumHelper.GetEnumDisplayName(col.Theme)));
             }
             return model;
+        }
+
+        public static string GetInitialTagsJson(ApplicationContext appContext)
+        {
+            string[] tags = appContext.UniqueTags.Select(t => t.TagValue).ToArray();
+            return JsonConvert.SerializeObject(tags);
         }
     }
 }

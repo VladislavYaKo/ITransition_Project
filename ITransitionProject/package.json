@@ -5,6 +5,7 @@
   "devDependencies": {},
   "dependencies": {
     "@yaireo/tagify": "^3.22.1",
+    "markdown-it": "^12.0.4",
     "prop-types": "^15.7.2"
   }
 }

@@ -13,10 +13,14 @@
         <input asp-for="Name" />
         <span asp-validation-for="Name"></span>
     </div>
+    <div>
+        <label>Тэги</label><br />
+        <input type="text" id="tags-input" name="JsonTags" />
+    </div>
     @for (int i = 0; i < Model.NumericFieldsNames?.Length; i++)
     {
         <label>
-            @Model.NumericFieldsNames[i]: <input type="number" name="NumericFieldsValues" value="@Model.NumericFieldsValues?[i]" maxlength="15"/>
+            @Model.NumericFieldsNames[i]: <input type="number" name="NumericFieldsValues" value="@Model.NumericFieldsValues?[i]" maxlength="15" />
         </label><br />
         <input type="hidden" name="NumericFieldsNames" value="@Model.NumericFieldsNames[i]" />
     }
@@ -25,7 +29,20 @@
 </form>
 
 @section Scripts {
-    @await Html.PartialAsync("_ValidationScriptsPartial");
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/3.22.1/tagify.min.js"
+            asp-fallback-src="~/@@yaireo/tagify/dist/tagify.min.js"></script>
+    <script>
+        let jsonInitialTags = "@Model.JsonInitialTags",
+            initialTags = JSON.parse(jsonInitialTags.replace(/(&quot\;)/g, "\"")),
+            input = document.getElementById('tags-input'),
+            tagify = new Tagify(input, {
+                whitelist: initialTags
+            }),
+            jsonItemTags = "@Model.JsonTags",
+            itemTags = JSON.parse(jsonItemTags.replace(/(&quot\;)/g, "\""));
+        tagify.addTags(itemTags);
+    </script>
 }
 
 

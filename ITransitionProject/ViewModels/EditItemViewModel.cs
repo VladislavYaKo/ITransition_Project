@@ -18,6 +18,8 @@ namespace ITransitionProject.ViewModels
         public string CollectionName { get; set; }
         public string CollectionTheme { get; set; }
         public string[] NumericFieldsNames { get; set; }
-        public string[] NumericFieldsValues { get; set; }       
+        public string[] NumericFieldsValues { get; set; }
+        public string JsonInitialTags { get; set; }
+        public string JsonTags { get; set; }
     }
 }

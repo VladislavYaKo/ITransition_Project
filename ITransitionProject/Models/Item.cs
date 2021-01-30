@@ -15,12 +15,21 @@ namespace ITransitionProject.Models
         public string CollectionUserId { get; set; }
         [Required]
         [MaxLength(50)]
-        public string Name { get; set; }
-        //Tags
+        public string Name { get; set; }        
         public int CollectionId { get; set; }        
         public AdditionalFieldsValues AddFieldsValues { get; set; }
         [ForeignKey("AddFieldsValues")]
         public Guid AddFieldsValuesId { get; set; }
         public List<Tag> Tags { get; set; }
+
+        public void SetTags(List<string> tags)
+        {
+            if (Tags == null)
+                Tags = new List<Tag>();
+            foreach(string tag in tags)
+            {
+                Tags.Add(new Tag(tag));
+            }
+        }
     }
 }

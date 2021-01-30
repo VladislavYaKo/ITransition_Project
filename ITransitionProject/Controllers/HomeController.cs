@@ -1,4 +1,6 @@
-﻿using ITransitionProject.Models;
+﻿using ITransitionProject.Helpers;
+using ITransitionProject.Models;
+using ITransitionProject.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,15 +14,18 @@ namespace ITransitionProject.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly ApplicationContext appContext;
+        public HomeController(ILogger<HomeController> logger, ApplicationContext appContext)
         {
             _logger = logger;
+            this.appContext = appContext;
         }
 
         public IActionResult Index()
         {
-            return View();
+            IndexViewModel model = new IndexViewModel();
+            model.JsonTagsCloud = CommonHelpers.GetInitialTagsJson(appContext);
+            return View(model);
         }
 
         public IActionResult Privacy()

@@ -1,0 +1,25 @@
+﻿@using ITransitionProject.ViewModels
+@model IEnumerable<FoundResultViewModel>
+
+<h2>Результаты поиска</h2>
+<table class="table">
+    <tr>
+        <th>Название</th>
+        <th>Дополнительные поля</th>
+        <th></th>
+    </tr>
+    @foreach (FoundResultViewModel result in Model)
+    {
+        <tr>
+            <td>@result.Item.Name</td>
+            <td></td>
+            <td><a class="btn btn-primary" asp-controller="Items" asp-action="ViewItem" asp-all-route-data='new Dictionary<string, string> {
+                                            {"Name", result.Item.Name},
+                                            {"ItemId", result.Item.Id.ToString() },
+                                            {"CollectionId", result.Item.CollectionId.ToString() },
+                                            {"UserId", result.Item.CollectionUserId },
+                                            {"CollectionName", result.CollectionName },
+                                            {"CollectionTheme", result.CollectionTheme } }'>Просмотреть</a></td>
+        </tr>
+    }
+</table>
