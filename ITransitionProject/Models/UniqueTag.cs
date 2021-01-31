@@ -11,7 +11,9 @@ namespace ITransitionProject.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Key]
+        [MaxLength(25)]
         public string TagValue { get; set; }
+        public uint Usage { get; set; }
 
         public UniqueTag() { }
         public UniqueTag(string tag) => this.TagValue = tag;

@@ -202,6 +202,8 @@ namespace ITransitionProject.Controllers
                 normTag = Char.ToUpper(normTag[0]) + normTag.Substring(1);
                 if (!appContext.UniqueTags.Select(i => i.TagValue).Contains(normTag))
                     appContext.UniqueTags.Add(new UniqueTag(normTag));
+                else
+                    appContext.UniqueTags.Find(normTag).Usage++;
             }
         }  
         

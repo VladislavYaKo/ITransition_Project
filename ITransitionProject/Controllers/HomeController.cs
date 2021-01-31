@@ -24,7 +24,7 @@ namespace ITransitionProject.Controllers
         public IActionResult Index()
         {
             IndexViewModel model = new IndexViewModel();
-            model.JsonTagsCloud = CommonHelpers.GetInitialTagsJson(appContext);
+            model.JsonTagsCloud = CommonHelpers.GetInitialTagsJson(appContext, 20);
             return View(model);
         }
 

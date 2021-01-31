@@ -15,6 +15,7 @@ namespace ITransitionProject.Helpers
 {
     public class CommonHelpers
     {
+        private const int selectRange = 100000;
         public static bool HasAccess(string userId, string myUserId, ClaimsPrincipal User)
         {
             if (userId != myUserId && !User.IsInRole("admin"))
@@ -37,6 +38,35 @@ namespace ITransitionProject.Helpers
         {
             string[] tags = appContext.UniqueTags.Select(t => t.TagValue).ToArray();
             return JsonConvert.SerializeObject(tags);
+        }
+
+        public static string GetInitialTagsJson(ApplicationContext appContext, int tagsNum)
+        {            
+            return JsonConvert.SerializeObject(FindSeveralMaxUniqueTag(appContext, tagsNum).Select(i => i.TagValue));  //При десериализации предполагается, что передан массив строк
+        }
+
+        private static List<UniqueTag> FindSeveralMaxUniqueTag(ApplicationContext appContext, int tagsNum)
+        {
+            int i = 0;
+            List<UniqueTag> result = new List<UniqueTag>();
+            List<UniqueTag> buf = new List<UniqueTag>();
+            int elemCount = appContext.UniqueTags.Count();
+            while (i < elemCount)
+            {
+                int range = selectRange;
+                if (i + selectRange > elemCount)
+                    range = elemCount - 1;
+                buf = FindSeveralMax<UniqueTag, uint>(appContext.UniqueTags.ToList().GetRange(i, range), range, i => i.Usage);
+                buf.AddRange(result);
+                result = buf.OrderByDescending(i => i.Usage).ToList().GetRange(0, range);
+                i += selectRange;
+            }
+            return result;
+        }
+
+        private static List<T> FindSeveralMax<T, TKey>(List<T> src, int itemsNum, Func<T, TKey> keySelector)
+        {
+            return src.OrderByDescending(keySelector).ToList().GetRange(0, itemsNum);
         }
     }
 }
