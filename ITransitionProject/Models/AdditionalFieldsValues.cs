@@ -33,5 +33,18 @@ namespace ITransitionProject.Models
         {
             return NumericFieldsValues != null ? NumericFieldsValues.Split(',') : null;
         }
+
+
+
+        public static string[] GetNumericValuesArray(ApplicationContext appContext, Guid id)
+        {
+            if (id != Guid.Empty)
+            {
+                AdditionalFieldsValues afv = appContext.AdditionalFieldsValues.Find(id);
+                return afv.GetNumericValuesArray();
+            }
+
+            return null;
+        }
     }
 }

@@ -22,11 +22,11 @@ namespace ITransitionProject.Models
         public Guid AddFieldsValuesId { get; set; }
         public List<Tag> Tags { get; set; }
 
-        public void SetTags(List<string> tags)
+        public void SetTags(List<string> newTags)
         {
             if (Tags == null)
                 Tags = new List<Tag>();
-            foreach(string tag in tags)
+            foreach(string tag in newTags)
             {
                 Tags.Add(new Tag(tag));
             }

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+//EditCollection, post - обновление работает?
 namespace ITransitionProject.Controllers
 {
     [Authorize(Roles = "user,admin")]
@@ -27,7 +28,7 @@ namespace ITransitionProject.Controllers
             if (userId == null)
                 userId = userManager.GetUserId(User);
             ViewBag.userId = userId;            
-            return View(CommonHelpers.MakeUpUserCollectionsViewModel(userId, appContext));
+            return View(CommonHelpers.MakeUpUserCollectionsVM(userId, appContext));
         }
 
         [HttpGet]
@@ -71,8 +72,8 @@ namespace ITransitionProject.Controllers
         [HttpGet]
         public IActionResult EditCollection(string userId, int collectionId)
         {
-            Collection col = appContext.Collections.FirstOrDefault(c => c.UserId == userId && c.Id == collectionId);
-            return View(new EditCollectionViewModel { Name= col?.Name, CollectionId = collectionId, UserId = col?.UserId, BriefDesc = col?.briefDesc , ImgUrl = col?.imgUrl});
+            Collection col = FindCollection(collectionId, userId);
+            return View(new EditCollectionViewModel { Name= col.Name, CollectionId = collectionId, UserId = col.UserId, BriefDesc = col.briefDesc , ImgUrl = col.imgUrl});
         }
 
         [HttpPost]
@@ -80,7 +81,7 @@ namespace ITransitionProject.Controllers
         {
             if(ModelState.IsValid)
             {
-                Collection newCol = appContext.Collections.FirstOrDefault(c => c.Id == model.CollectionId);
+                Collection newCol = FindCollection(model.CollectionId, model.UserId);
                 User curUser = await userManager.GetUserAsync(User);
                 if (newCol.UserId == curUser.Id || await userManager.IsInRoleAsync(curUser, "admin"))
                 {
@@ -103,12 +104,9 @@ namespace ITransitionProject.Controllers
         [HttpGet]
         public IActionResult ViewCollection(string userId, int collectionId)
         {
-            Collection col = appContext.Collections.FirstOrDefault(c => c.UserId == userId && c.Id == collectionId);
+            Collection col = FindCollection(collectionId, userId);
             List<Item> items = appContext.Items.Where(i => i.CollectionUserId == userId && i.CollectionId == collectionId).ToList();
-            if (col.AddFieldsNamesId != Guid.Empty)
-                ViewBag.AdditionalFieldsNames = appContext.AdditionalFieldsNames.FirstOrDefault(a => a.Id == col.AddFieldsNamesId).GetAllNames();
-            else
-                ViewBag.AdditionalFieldsNames = "";
+            ViewBag.AdditionalFieldsNames = AdditionalFieldsNames.GetAllNames(appContext, col.AddFieldsNamesId);
             return View(new EditCollectionItemsViewModel(userId, collectionId, col.Name, EnumHelper.GetEnumDisplayName(col.Theme), items));
         }
 
@@ -118,10 +116,10 @@ namespace ITransitionProject.Controllers
             if (!CommonHelpers.HasAccess(userId, userManager.GetUserId(User), User))
                 return StatusCode(403);
 
-            appContext.Collections.Remove(appContext.Collections.FirstOrDefault(c => c.UserId == userId && c.Id == collectionId));
+            appContext.Collections.Remove(await appContext.Collections.FindAsync(collectionId, userId));
             await appContext.SaveChangesAsync();
             ViewBag.userId = userId;
-            return View("EditCollections", CommonHelpers.MakeUpUserCollectionsViewModel(userId, appContext));
+            return View("EditCollections", CommonHelpers.MakeUpUserCollectionsVM(userId, appContext));
         }              
 
         private int CalculateNewCollectionIndex(string userId)
@@ -131,6 +129,11 @@ namespace ITransitionProject.Controllers
                 return colList.Max(p => p.Id) + 1;
             else
                 return 1;
-        }        
+        }
+
+        private Collection FindCollection(int collectionId, string userId)
+        {
+            return appContext.Collections.Find(collectionId, userId);
+        }
     }
 }

@@ -33,7 +33,7 @@ namespace ITransitionProject.Controllers
 
             ViewBag.userId = userId;
             
-            return View(CommonHelpers.MakeUpUserCollectionsViewModel(userId, appContext));
+            return View(CommonHelpers.MakeUpUserCollectionsVM(userId, appContext));
         }
 
         public IActionResult UserCollection(string userId, int collectionId)

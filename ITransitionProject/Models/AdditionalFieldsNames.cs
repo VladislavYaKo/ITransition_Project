@@ -38,9 +38,31 @@ namespace ITransitionProject.Models
                 + BooleanFieldsNames ?? "";
         }
 
+        public static string GetAllNames(ApplicationContext appContext, Guid id)
+        {
+            if (id != Guid.Empty)
+            {
+                AdditionalFieldsNames afn = appContext.AdditionalFieldsNames.Find(id);
+                return afn.GetAllNames();
+            }
+
+            return "";
+        }
+
         public string[] GetNumericFieldsArray()
         {
             return NumericFieldsNames != null ? NumericFieldsNames.Split(',') : null;
+        }
+
+        public static string[] GetNumericFieldsArray(ApplicationContext appContext, Guid id)
+        {
+            if (id != Guid.Empty)
+            {
+                AdditionalFieldsNames afn = appContext.AdditionalFieldsNames.Find(id);
+                return afn.GetNumericFieldsArray();
+            }
+
+            return null;
         }
     }
 }

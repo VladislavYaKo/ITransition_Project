@@ -24,7 +24,7 @@ namespace ITransitionProject.Helpers
                 return true;
         }
 
-        public static IEnumerable<UserCollectionsViewModel> MakeUpUserCollectionsViewModel(string userId, ApplicationContext appContext)
+        public static IEnumerable<UserCollectionsViewModel> MakeUpUserCollectionsVM(string userId, ApplicationContext appContext)
         {
             List<UserCollectionsViewModel> model = new List<UserCollectionsViewModel>();
             foreach (Collection col in appContext.Collections.Where(col => col.UserId == userId))

@@ -11,7 +11,8 @@ namespace ITransitionProject.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Key]
-        [MaxLength(25)]
+        [MinLength(1)]
+        [MaxLength(30)]
         public string TagValue { get; set; }
         public uint Usage { get; set; }
 
