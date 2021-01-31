@@ -53,7 +53,6 @@ namespace ITransitionProject.Controllers
         {
             foreach(User user in affectedUsers)
             {
-                await userManager.SetLockoutEndDateAsync(user, DateTime.MaxValue);  //Нужно только для уже зареганых пользователей. Если всех удалим - можно будет убрать
                 await userManager.SetLockoutEnabledAsync(user, true);
             }
         }

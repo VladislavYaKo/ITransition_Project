@@ -20,6 +20,11 @@ namespace ITransitionProject.Models
 
         public Tag() { }
         public Tag(string tag) => this.TagValue = tag;
+        public Tag(string userId, string tag)
+        {
+            this.ItemCollectionUserId = userId;
+            this.TagValue = tag;
+        }
         public Tag(string userId, Guid itemId, string tag)
         {
             this.ItemCollectionUserId = userId;

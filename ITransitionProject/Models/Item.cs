@@ -30,7 +30,7 @@ namespace ITransitionProject.Models
                 Tags = new List<Tag>();
             foreach(string tag in newTags)
             {
-                Tags.Add(new Tag(tag));
+                Tags.Add(new Tag(CollectionUserId, tag));
             }
         }
     }

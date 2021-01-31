@@ -35,12 +35,12 @@
                             </ul>
                         </div>
                         <div class="col-md-7">
-                            <form>
+                            <form role="form" asp-controller="Items" asp-action="">
                                 <div class="row">
-                                    <div class="col-md-10">
-                                        <input type="text" placeholder="Поиск..." class="form-control form-control-sm" />
+                                    <div class="col-md-8">
+                                        <input type="text" placeholder="Поиск..." class="form-control form-control-sm" name="search"/>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-4">
                                         <input type="submit" class="btn form-control form-control-sm" value="Поиск" />
                                     </div>
                                 </div>

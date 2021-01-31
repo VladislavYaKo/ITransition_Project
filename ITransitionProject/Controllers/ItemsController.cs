@@ -112,6 +112,8 @@ namespace ITransitionProject.Controllers
 
             Collection col = FindCollection(model.CollectionId);
             Item item = FindItem(model.ItemId);
+            if (item == null)
+                return StatusCode(404);
             string[] NumericFieldsNames = AdditionalFieldsNames.GetNumericFieldsArray(appContext, col.AddFieldsNamesId);            
             string[] NumericFieldsValues = AdditionalFieldsValues.GetNumericValuesArray(appContext, item.AddFieldsValuesId);
             List<string> itemTags = appContext.Tags.Where(t => t.ItemCollectionUserId == model.UserId && t.ItemId == model.ItemId).Select(t => t.TagValue).ToList();
@@ -139,11 +141,13 @@ namespace ITransitionProject.Controllers
             item.AddFieldsValues = new AdditionalFieldsValues(model.NumericFieldsValues);
             List<string> tags = ParseJsonValues(model.JsonTags);
             UpdateTagsInDB(model.UserId, model.ItemId, tags);
+            AddUniqueTags(tags);
             appContext.Items.Update(item);
             await appContext.SaveChangesAsync();
             return RedirectToAction("ViewCollection", "Collections", new { userId = model.UserId, collectionId = model.CollectionId });
         }
 
+        [AllowAnonymous]
         public IActionResult TagFoundResult(string search)
         {
             List<Tag> foundTags = appContext.Tags.Where(t => t.TagValue.ToLower() == search.ToLower()).ToList();
@@ -157,18 +161,15 @@ namespace ITransitionProject.Controllers
             return View(MakeUpListFoundResultVM(foundItems));
         }
 
-        /*private int CalculateNewItemIndex(string userId)
+        /*[AllowAnonymous]
+        public IActionResult FoundResult(string search)
         {
-            List<Item> items = appContext.Items.Where(i => i.CollectionUserId == userId).ToList();
-            if (items.Count > 0)
-                return items.Max(i => i.Id) + 1;
-            else
-                return 1;
+
         }*/
 
         private List<string> ParseJsonValues(string jsonStr)
         {
-            var parsed = JArray.Parse(jsonStr);
+            var parsed = jsonStr != null ? JArray.Parse(jsonStr) : new JArray();
             List<string> result = new List<string>();
             foreach(JToken jt in parsed)
             {
@@ -219,9 +220,9 @@ namespace ITransitionProject.Controllers
             return appContext.Items.Find(itemId);
         }
 
-        private List<string> FindTagsChanges(string userId, Guid itemId, List<string> newTags, out List<string> deletingTags)
+        private List<string> FindTagsChanges(Guid itemId, List<string> newTags, out List<string> deletingTags)
         {
-            List<Tag> oldTags = appContext.Tags.Where(t => t.ItemCollectionUserId == userId && t.ItemId == itemId).ToList();
+            List<Tag> oldTags = appContext.Tags.Where(t => t.ItemId == itemId).ToList();
             List<string> adding = newTags.Except(oldTags.Select(i => i.TagValue)).ToList();
             deletingTags = oldTags.Select(i => i.TagValue).Except(newTags).ToList();
             return adding;
@@ -230,13 +231,13 @@ namespace ITransitionProject.Controllers
         private void UpdateTagsInDB(string userId, Guid itemId, List<string> newTags)
         {
             List<string> deleting = new List<string>();
-            List<string> adding = FindTagsChanges(userId, itemId, newTags, out deleting);
+            List<string> adding = FindTagsChanges(itemId, newTags, out deleting);
             List<Tag> addingTags = new List<Tag>();
             foreach (string value in adding)
                 addingTags.Add(new Tag(userId, itemId, value));
             appContext.Tags.AddRange(addingTags);
             foreach (string value in deleting)
-                appContext.Tags.Remove(appContext.Tags.Find(userId, itemId, value));
+                appContext.Tags.Remove(appContext.Tags.Find(itemId, value));
         }
     }
 }
