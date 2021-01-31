@@ -92,7 +92,7 @@ namespace ITransitionProject.Migrations
                 defaultValueSql: "newsequentialid()", //Manual
                 nullable: false/*,
                 oldClrType: typeof(int),
-                oldType: "int"*/);
+                oldType: "int"*/);           
 
             migrationBuilder.AlterColumn<string>(
                 name: "UserId",
@@ -116,7 +116,7 @@ namespace ITransitionProject.Migrations
                 defaultValueSql: "newsequentialid()",  //Manual
                 nullable: false/*,
                 oldClrType: typeof(int),
-                oldType: "int"*/);
+                oldType: "int"*/);           
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_Items",
