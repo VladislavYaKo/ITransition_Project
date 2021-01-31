@@ -12,7 +12,7 @@ namespace ITransitionProject.Models
         [Column(Order = 0)]
         public string ItemCollectionUserId {get;set;}
         [Column(Order = 1)]
-        public int ItemId { get; set; }
+        public Guid ItemId { get; set; }
         [MinLength(1)]
         [MaxLength(30)]
         [Column(Order = 2)]
@@ -20,7 +20,7 @@ namespace ITransitionProject.Models
 
         public Tag() { }
         public Tag(string tag) => this.TagValue = tag;
-        public Tag(string userId, int itemId, string tag)
+        public Tag(string userId, Guid itemId, string tag)
         {
             this.ItemCollectionUserId = userId;
             this.ItemId = itemId;

@@ -21,11 +21,11 @@ namespace ITransitionProject.Models
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<User>().Property(p => p.intId).ValueGeneratedOnAdd();
-            builder.Entity<User>().Property(p => p.intId).Metadata.SetAfterSaveBehavior(Microsoft.EntityFrameworkCore.Metadata.PropertySaveBehavior.Ignore);
-            builder.Entity<Collection>().HasKey(p => new { p.Id, p.UserId });
-            builder.Entity<Item>().HasKey(p => new { p.Id, p.CollectionUserId });
-            builder.Entity<Tag>().HasKey(p => new { p.ItemCollectionUserId, p.ItemId, p.TagValue });
+            /*builder.Entity<User>().Property(p => p.intId).ValueGeneratedOnAdd();
+            builder.Entity<User>().Property(p => p.intId).Metadata.SetAfterSaveBehavior(Microsoft.EntityFrameworkCore.Metadata.PropertySaveBehavior.Ignore);*/
+            //builder.Entity<Item> - первичный ключ устанавливался
+            //builder.Entity<Collection>().HasKey(p => new { p.Id, p.UserId });
+            builder.Entity<Tag>().HasKey(p => new { p.ItemId, p.TagValue });
             base.OnModelCreating(builder);
         }
     }

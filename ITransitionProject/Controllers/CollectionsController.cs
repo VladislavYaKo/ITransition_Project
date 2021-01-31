@@ -46,10 +46,10 @@ namespace ITransitionProject.Controllers
             if(ModelState.IsValid)
             {
                 AdditionalFieldsNames afn = null;
-                if (model.NumericFieldName.Length > 0)
+                if (model.NumericFieldName?.Length > 0)
                     afn = new AdditionalFieldsNames(model.NumericFieldName);
-                Collection newCollection = new Collection { Id = CalculateNewCollectionIndex(model.UserId), 
-                    UserId = model.UserId,
+                Collection newCollection = new Collection { 
+                    //UserId = model.UserId,
                     Name = model.Name, 
                     Theme = model.Theme, 
                     briefDesc = model.BriefDesc, 
@@ -70,9 +70,9 @@ namespace ITransitionProject.Controllers
         }
 
         [HttpGet]
-        public IActionResult EditCollection(string userId, int collectionId)
+        public IActionResult EditCollection(string userId, Guid collectionId)
         {
-            Collection col = FindCollection(collectionId, userId);
+            Collection col = FindCollection(collectionId);
             return View(new EditCollectionViewModel { Name= col.Name, CollectionId = collectionId, UserId = col.UserId, BriefDesc = col.briefDesc , ImgUrl = col.imgUrl});
         }
 
@@ -81,7 +81,7 @@ namespace ITransitionProject.Controllers
         {
             if(ModelState.IsValid)
             {
-                Collection newCol = FindCollection(model.CollectionId, model.UserId);
+                Collection newCol = FindCollection(model.CollectionId);
                 User curUser = await userManager.GetUserAsync(User);
                 if (newCol.UserId == curUser.Id || await userManager.IsInRoleAsync(curUser, "admin"))
                 {
@@ -102,38 +102,38 @@ namespace ITransitionProject.Controllers
         }
 
         [HttpGet]
-        public IActionResult ViewCollection(string userId, int collectionId)
+        public IActionResult ViewCollection(string userId, Guid collectionId)
         {
-            Collection col = FindCollection(collectionId, userId);
-            List<Item> items = appContext.Items.Where(i => i.CollectionUserId == userId && i.CollectionId == collectionId).ToList();
+            Collection col = FindCollection(collectionId);
+            List<Item> items = appContext.Items.Where(i => i.CollectionId == collectionId).ToList();
             ViewBag.AdditionalFieldsNames = AdditionalFieldsNames.GetAllNames(appContext, col.AddFieldsNamesId);
             return View(new EditCollectionItemsViewModel(userId, collectionId, col.Name, EnumHelper.GetEnumDisplayName(col.Theme), items));
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteCollection(string userId, int collectionId)
+        public async Task<IActionResult> DeleteCollection(string userId, Guid collectionId)
         {
             if (!CommonHelpers.HasAccess(userId, userManager.GetUserId(User), User))
                 return StatusCode(403);
 
-            appContext.Collections.Remove(await appContext.Collections.FindAsync(collectionId, userId));
+            appContext.Collections.Remove(await appContext.Collections.FindAsync(collectionId));
             await appContext.SaveChangesAsync();
             ViewBag.userId = userId;
             return View("EditCollections", CommonHelpers.MakeUpUserCollectionsVM(userId, appContext));
         }              
 
-        private int CalculateNewCollectionIndex(string userId)
+        /*private int CalculateNewCollectionIndex(string userId)
         {
             List<Collection> colList = appContext.Collections.Where(p => p.UserId == userId).ToList();
             if (colList.Count > 0)
                 return colList.Max(p => p.Id) + 1;
             else
                 return 1;
-        }
+        }*/
 
-        private Collection FindCollection(int collectionId, string userId)
+        private Collection FindCollection(Guid collectionId)
         {
-            return appContext.Collections.Find(collectionId, userId);
+            return appContext.Collections.Find(collectionId);
         }
     }
 }

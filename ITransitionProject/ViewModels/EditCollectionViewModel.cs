@@ -10,7 +10,7 @@ namespace ITransitionProject.ViewModels
     public class EditCollectionViewModel
     {
         public string UserId { get; set; }
-        public int CollectionId { get; set; }
+        public Guid CollectionId { get; set; }
         [Required]
         [MaxLength(50)]
         public string Name { get; set; }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ITransitionProject.Controllers
 {
-    //[Authorize(Roles ="admin")]
+    [Authorize(Roles ="admin")]
     public class AdminController : Controller
     {
         private readonly UserManager<User> userManager;
@@ -31,8 +31,8 @@ namespace ITransitionProject.Controllers
         [HttpPost]
         public async Task<IActionResult> EditUsers(string actionBtn)
         {
-            int[] ids = Request.Form["choosenUser"].Select(int.Parse).ToArray();
-            List<User> affectedUsers = userManager.Users.Where(u => ids.Contains(u.intId)).ToList();
+            string[] ids = Request.Form["choosenUser"].ToArray();
+            List<User> affectedUsers = userManager.Users.Where(u => ids.Contains(u.Id)).ToList();
             Task result = (Task)this.GetType()
                     .GetMethod(actionBtn + "Users", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
                     .Invoke(this, new object[] { affectedUsers });

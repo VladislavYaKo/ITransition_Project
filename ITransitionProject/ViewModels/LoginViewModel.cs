@@ -10,7 +10,6 @@ namespace ITransitionProject.ViewModels
     {
         [Required]
         [Display(Name = "Email")]
-        //[DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         [Required]

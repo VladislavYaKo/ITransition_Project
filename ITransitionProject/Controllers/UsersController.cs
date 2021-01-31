@@ -36,18 +36,15 @@ namespace ITransitionProject.Controllers
             return View(CommonHelpers.MakeUpUserCollectionsVM(userId, appContext));
         }
 
-        public IActionResult UserCollection(string userId, int collectionId)
+        public IActionResult UserCollection(string userId, Guid collectionId)
         {
             if (User.IsInRole("admin"))
                 return RedirectToAction("ViewCollection", "Collections", new { userId = userId, collectionId = collectionId });
 
-            Collection col = appContext.Collections.FirstOrDefault(c => c.UserId == userId && c.Id == collectionId);
+            Collection col = appContext.Collections.Find(collectionId);
             ViewBag.UserId = userId;
             ViewBag.CollectionId = collectionId;
-            if (col.AddFieldsNamesId != Guid.Empty)
-                ViewBag.AdditionalFieldsNames = appContext.AdditionalFieldsNames.FirstOrDefault(a => a.Id == col.AddFieldsNamesId).GetAllNames();
-            else
-                ViewBag.AdditionalFieldsNames = "";
+            ViewBag.AdditionalFieldsNames = AdditionalFieldsNames.GetAllNames(appContext, col.AddFieldsNamesId);
 
             EditCollectionItemsViewModel model = new EditCollectionItemsViewModel();
             model.CollectionId = collectionId;

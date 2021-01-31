@@ -9,7 +9,7 @@ namespace ITransitionProject.ViewModels
     public class EditCollectionItemsViewModel
     {
         public EditCollectionItemsViewModel() { }
-        public EditCollectionItemsViewModel(string userId, int colId, string colName, string colTheme, List<Item> items)
+        public EditCollectionItemsViewModel(string userId, Guid colId, string colName, string colTheme, List<Item> items)
         {
             this.UserId = userId;
             this.CollectionId = colId;
@@ -18,7 +18,7 @@ namespace ITransitionProject.ViewModels
             this.Items = items;
         }
         public string UserId { get; set; }
-        public int CollectionId { get; set; }
+        public Guid CollectionId { get; set; }
         public string CollectionName { get; set; }
         public string CollectionTheme { get; set; }
         public List<Item> Items { get; set; }

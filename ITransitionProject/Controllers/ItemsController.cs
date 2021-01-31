@@ -27,8 +27,8 @@ namespace ITransitionProject.Controllers
         [AllowAnonymous]
         public IActionResult ViewItem(EditItemViewModel model)
         {
-            Collection col = FindCollection(model.CollectionId, model.UserId);
-            Item item = FindItem(model.ItemId, model.UserId);
+            Collection col = FindCollection(model.CollectionId);
+            Item item = FindItem(model.ItemId);
             List<string> itemTags = appContext.Tags.Where(t => t.ItemCollectionUserId == model.UserId && t.ItemId == model.ItemId).Select(t => t.TagValue).ToList();
             return View(new EditItemViewModel
             {
@@ -45,12 +45,12 @@ namespace ITransitionProject.Controllers
         }
 
         [HttpGet]
-        public IActionResult AddItem(string UserId, int CollectionId, string CollectionName, string CollectionTheme)
+        public IActionResult AddItem(string UserId, Guid CollectionId, string CollectionName, string CollectionTheme)
         {
             if (!CommonHelpers.HasAccess(UserId, userManager.GetUserId(User), User))
                 return StatusCode(403);
 
-            Collection col = FindCollection(CollectionId, UserId);
+            Collection col = FindCollection(CollectionId);
             string[] NumericFieldsNames = AdditionalFieldsNames.GetNumericFieldsArray(appContext, col.AddFieldsNamesId);
 
             return View(new EditItemViewModel
@@ -72,12 +72,11 @@ namespace ITransitionProject.Controllers
             {
                 List<string> tags = ParseJsonValues(model.JsonTags);
                 AdditionalFieldsValues afv = null;
-                if (model.NumericFieldsValues.Length > 0)
+                if (model.NumericFieldsValues?.Length > 0)
                     afv = new AdditionalFieldsValues(model.NumericFieldsValues);
                 Item newItem = new Item
                 {
                     Name = model.Name,
-                    Id = CalculateNewItemIndex(model.UserId),
                     CollectionId = model.CollectionId,
                     CollectionUserId = model.UserId,
                     AddFieldsValues = afv
@@ -95,12 +94,12 @@ namespace ITransitionProject.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> DeleteItem(EditCollectionItemsViewModel model, int itemId)
+        public async Task<IActionResult> DeleteItem(EditCollectionItemsViewModel model, Guid itemId)
         {
             if (!CommonHelpers.HasAccess(model.UserId, userManager.GetUserId(User), User))
                 return StatusCode(403);
 
-            appContext.Items.Remove(FindItem(itemId, model.UserId));
+            appContext.Items.Remove(FindItem(itemId));
             await appContext.SaveChangesAsync();
             return RedirectToAction("ViewCollection", "Collections", new { userId = model.UserId, collectionId = model.CollectionId });
         }
@@ -111,8 +110,8 @@ namespace ITransitionProject.Controllers
             if (!CommonHelpers.HasAccess(model.UserId, userManager.GetUserId(User), User))
                 return StatusCode(403);
 
-            Collection col = FindCollection(model.CollectionId, model.UserId);
-            Item item = FindItem(model.ItemId, model.UserId);
+            Collection col = FindCollection(model.CollectionId);
+            Item item = FindItem(model.ItemId);
             string[] NumericFieldsNames = AdditionalFieldsNames.GetNumericFieldsArray(appContext, col.AddFieldsNamesId);            
             string[] NumericFieldsValues = AdditionalFieldsValues.GetNumericValuesArray(appContext, item.AddFieldsValuesId);
             List<string> itemTags = appContext.Tags.Where(t => t.ItemCollectionUserId == model.UserId && t.ItemId == model.ItemId).Select(t => t.TagValue).ToList();
@@ -135,7 +134,7 @@ namespace ITransitionProject.Controllers
         [HttpPost]
         public async Task<IActionResult> EditItem(EditItemViewModel model)
         {
-            Item item = FindItem(model.ItemId, model.UserId);
+            Item item = FindItem(model.ItemId);
             item.Name = model.Name;
             item.AddFieldsValues = new AdditionalFieldsValues(model.NumericFieldsValues);
             List<string> tags = ParseJsonValues(model.JsonTags);
@@ -151,21 +150,21 @@ namespace ITransitionProject.Controllers
             List<Item> foundItems = new List<Item>();
             foreach(Tag tag in foundTags)
             {
-                Item item = FindItem(tag.ItemId, tag.ItemCollectionUserId);
+                Item item = FindItem(tag.ItemId);
                 if (item != null)
                     foundItems.Add(item);
             }
-            return View(MakeUpFoundResultVM(foundItems));
+            return View(MakeUpListFoundResultVM(foundItems));
         }
 
-        private int CalculateNewItemIndex(string userId)
+        /*private int CalculateNewItemIndex(string userId)
         {
             List<Item> items = appContext.Items.Where(i => i.CollectionUserId == userId).ToList();
             if (items.Count > 0)
                 return items.Max(i => i.Id) + 1;
             else
                 return 1;
-        }
+        }*/
 
         private List<string> ParseJsonValues(string jsonStr)
         {
@@ -191,18 +190,18 @@ namespace ITransitionProject.Controllers
             }
         }  
         
-        private List<FoundResultViewModel> MakeUpFoundResultVM(List<Item> items)
+        private List<FoundResultViewModel> MakeUpListFoundResultVM(List<Item> items)
         {
             List<FoundResultViewModel> result = new List<FoundResultViewModel>();
             foreach(Item item in items)
             {
                 FoundResultViewModel elem = new FoundResultViewModel();
-                Collection itemCol = FindCollection(item.CollectionId, item.CollectionUserId);
+                Collection itemCol = FindCollection(item.CollectionId);
                 elem.Item = item;
                 elem.CollectionName = itemCol.Name;
                 elem.CollectionTheme = EnumHelper.GetEnumDisplayName(itemCol.Theme);
                 if (itemCol.AddFieldsNamesId != Guid.Empty)
-                    elem.AdditionalFields = appContext.AdditionalFieldsNames.FirstOrDefault(a => a.Id == itemCol.AddFieldsNamesId).GetAllNames();
+                    elem.AdditionalFields = appContext.AdditionalFieldsNames.Find(itemCol.AddFieldsNamesId).GetAllNames();
                 else
                     elem.AdditionalFields = "";
                 result.Add(elem);
@@ -210,17 +209,17 @@ namespace ITransitionProject.Controllers
             return result;
         }
 
-        private Collection FindCollection(int collectionId, string userId)
+        private Collection FindCollection(Guid collectionId)
         {
-            return appContext.Collections.Find(collectionId, userId);
+            return appContext.Collections.Find(collectionId);
         }
 
-        private Item FindItem(int itemId, string userId)
+        private Item FindItem(Guid itemId)
         {
-            return appContext.Items.Find(itemId, userId);
+            return appContext.Items.Find(itemId);
         }
 
-        private List<string> FindTagsChanges(string userId, int itemId, List<string> newTags, out List<string> deletingTags)
+        private List<string> FindTagsChanges(string userId, Guid itemId, List<string> newTags, out List<string> deletingTags)
         {
             List<Tag> oldTags = appContext.Tags.Where(t => t.ItemCollectionUserId == userId && t.ItemId == itemId).ToList();
             List<string> adding = newTags.Except(oldTags.Select(i => i.TagValue)).ToList();
@@ -228,7 +227,7 @@ namespace ITransitionProject.Controllers
             return adding;
         }
 
-        private void UpdateTagsInDB(string userId, int itemId, List<string> newTags)
+        private void UpdateTagsInDB(string userId, Guid itemId, List<string> newTags)
         {
             List<string> deleting = new List<string>();
             List<string> adding = FindTagsChanges(userId, itemId, newTags, out deleting);

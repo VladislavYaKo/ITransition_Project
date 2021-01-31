@@ -9,7 +9,7 @@ namespace ITransitionProject.Models
 {
     public class User : IdentityUser
     {
-        public int intId { get; set; }
+        //public int intId { get; set; }
 
         public string NotLoginName { get; set; }
         public List<Collection> Collections { get; set; }

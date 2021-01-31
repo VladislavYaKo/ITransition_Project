@@ -23,7 +23,9 @@ namespace ITransitionProject.Models
             Clothes,
         }
         [Column(Order = 0)]
-        public int Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
+        public Guid Id { get; set; }
         [Column(Order = 1)]
         [MaxLength(450)]
         public string UserId { get; set; }

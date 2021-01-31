@@ -19,11 +19,12 @@
         </tr>
         @{
             List<User> users = Model.Users.ToList();
+            int i = 0;
             foreach (User user in users)
             {
                 <tr>
-                    <td><input type="checkbox" name="choosenUser" value="@user.intId" class="userCheckBox" /></td>
-                    <td>@user.intId</td>
+                    <td><input type="checkbox" name="choosenUser" value="@user.Id" class="userCheckBox" /></td>
+                    <td>@i</td>
                     <td>@user.Id</td>
                     <td>@user.NotLoginName</td>
                     <td>@user.Email</td>
@@ -44,6 +45,7 @@
                         <td>Пользователь</td>
                     }
                 </tr>
+                i++;
             }
         }
 

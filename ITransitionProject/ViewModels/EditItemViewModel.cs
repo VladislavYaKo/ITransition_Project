@@ -11,8 +11,8 @@ namespace ITransitionProject.ViewModels
         [Required]
         public string UserId { get; set; }
         [Required]
-        public int CollectionId { get; set; }
-        public int ItemId { get; set; }
+        public Guid CollectionId { get; set; }
+        public Guid ItemId { get; set; }
         [Required]
         public string Name { get; set; }
         public string CollectionName { get; set; }
