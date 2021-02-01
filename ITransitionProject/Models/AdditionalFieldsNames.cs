@@ -53,11 +53,12 @@ namespace ITransitionProject.Models
 
         public string GetAllNames()
         {
-            return NumericFieldsNames ?? ""
-                + SingleLineFieldsNames ?? ""
-                + MultiLineFieldsNames ?? "" 
-                + DateFieldsNames ?? ""
-                + BooleanFieldsNames ?? "";
+            string result = NumericFieldsNames != null ? NumericFieldsNames + ", " : "";
+            result += SingleLineFieldsNames != null ? SingleLineFieldsNames + ", " : "";
+            result += MultiLineFieldsNames != null ? MultiLineFieldsNames + ", " : "";
+            result += DateFieldsNames != null ? DateFieldsNames + ", " : "";
+            result += BooleanFieldsNames != null ? BooleanFieldsNames : "";
+            return result;
         }
 
         public static string GetAllNames(ApplicationContext appContext, Guid id)

@@ -41,13 +41,13 @@ namespace ITransitionProject.Controllers
                 NumericFieldsNames = AdditionalFieldsNames.GetNumericFieldsArray(appContext, col.AddFieldsNamesId),
                 NumericFieldsValues = AdditionalFieldsValues.GetNumericValuesArray(appContext, item.AddFieldsValuesId),
                 SLFieldsNames = AdditionalFieldsNames.GetSingleLineFieldsArray(appContext, col.AddFieldsNamesId),
-                SLFieldsValues = AdditionalFieldsValues.GetSingleLineValuesArray(appContext, col.AddFieldsNamesId),
+                SLFieldsValues = AdditionalFieldsValues.GetSingleLineValuesArray(appContext, item.AddFieldsValuesId),
                 MLFieldsNames = AdditionalFieldsNames.GetMultiLineFieldsArray(appContext, col.AddFieldsNamesId),
-                MLFieldsValues = AdditionalFieldsValues.GetMultiLineValuesArray(appContext, col.AddFieldsNamesId),
+                MLFieldsValues = AdditionalFieldsValues.GetMultiLineValuesArray(appContext, item.AddFieldsValuesId),
                 DateFieldsNames = AdditionalFieldsNames.GetDateFieldsArray(appContext, col.AddFieldsNamesId),
-                DateFieldsValues = AdditionalFieldsValues.GetDateValuesArray(appContext, col.AddFieldsNamesId),
+                DateFieldsValues = AdditionalFieldsValues.GetDateValuesArray(appContext, item.AddFieldsValuesId),
                 BoolFieldsNames = AdditionalFieldsNames.GetBooleanFieldsArray(appContext, col.AddFieldsNamesId),
-                BoolsFieldsValues = AdditionalFieldsValues.GetBooleanValuesArray(appContext, col.AddFieldsNamesId),
+                BoolFieldsValues = AdditionalFieldsValues.GetBooleanValuesArray(appContext, item.AddFieldsValuesId),
                 JsonTags = JsonConvert.SerializeObject(itemTags)
             }
             );
@@ -61,6 +61,10 @@ namespace ITransitionProject.Controllers
 
             Collection col = FindCollection(CollectionId);
             string[] NumericFieldsNames = AdditionalFieldsNames.GetNumericFieldsArray(appContext, col.AddFieldsNamesId);
+            string[] SLFieldsNames = AdditionalFieldsNames.GetSingleLineFieldsArray(appContext, col.AddFieldsNamesId);
+            string[] MLFieldsNames = AdditionalFieldsNames.GetMultiLineFieldsArray(appContext, col.AddFieldsNamesId);
+            string[] DateFieldsNames = AdditionalFieldsNames.GetDateFieldsArray(appContext, col.AddFieldsNamesId);
+            string[] BoolFieldsNames = AdditionalFieldsNames.GetBooleanFieldsArray(appContext, col.AddFieldsNamesId);
 
             return View(new EditItemViewModel
             {
@@ -70,6 +74,14 @@ namespace ITransitionProject.Controllers
                 CollectionTheme = CollectionTheme,
                 NumericFieldsNames = NumericFieldsNames,
                 NumericFieldsValues = new string[NumericFieldsNames != null ? NumericFieldsNames.Length : 0],
+                SLFieldsNames = SLFieldsNames,
+                SLFieldsValues = new string[SLFieldsNames != null ? SLFieldsNames.Length : 0],
+                MLFieldsNames = MLFieldsNames,
+                MLFieldsValues = new string[MLFieldsNames != null ? MLFieldsNames.Length : 0],
+                DateFieldsNames = DateFieldsNames,
+                DateFieldsValues = new string[DateFieldsNames != null ? DateFieldsNames.Length : 0],
+                BoolFieldsNames = BoolFieldsNames,
+                BoolFieldsValues = new string[BoolFieldsNames != null ? BoolFieldsNames.Length : 0],
                 JsonInitialTags = CommonHelpers.GetInitialTagsJson(appContext)
             });
         }
@@ -79,10 +91,14 @@ namespace ITransitionProject.Controllers
         {
             if (ModelState.IsValid)
             {
+                string[] boolFieldsNames = Request.Form["BoolFieldsNames"].ToArray();
                 List<string> tags = ParseJsonValues(model.JsonTags);
-                AdditionalFieldsValues afv = null;
-                if (model.NumericFieldsValues?.Length > 0)
-                    afv = new AdditionalFieldsValues(model.NumericFieldsValues);
+                AdditionalFieldsValues afv = SetAdditionalFieldsValues(model.NumericFieldsValues,
+                    model.SLFieldsValues,
+                    model.MLFieldsValues,
+                    model.DateFieldsValues,
+                    model.BoolFieldsValues,
+                    model.BoolFieldsNames);
                 Item newItem = new Item
                 {
                     Name = model.Name,
@@ -100,6 +116,57 @@ namespace ITransitionProject.Controllers
                 ModelState.AddModelError("", "Некорректно заполнены поля.");
 
             return View(model);
+        }
+
+        private AdditionalFieldsValues SetAdditionalFieldsValues(string[] numericFieldsValues,
+            string[] SLFieldsValues,
+            string[] MLFieldsvalues,
+            string[] dateFieldsValues,
+            string[] boolFieldsValues,
+            string[] boolFieldsNames)
+        {
+            bool filled = false;
+            AdditionalFieldsValues result = new AdditionalFieldsValues();
+            if (numericFieldsValues != null)
+            {
+                result.SetNumericFieldsValues(numericFieldsValues);
+                filled = true;
+            }
+            if(SLFieldsValues != null)
+            {
+                result.SetSingleLineFieldsValues(SLFieldsValues);
+                filled = true;
+            }
+            if(MLFieldsvalues != null)
+            {
+                result.SetMultiLineFieldsValues(MLFieldsvalues);
+                filled = true;
+            }
+            if(dateFieldsValues != null)
+            {
+                result.SetDateFieldsValues(dateFieldsValues);
+                filled = true;
+            }
+            if (boolFieldsNames != null)
+            {
+                List<string> boolsStrs = new List<string>();
+                foreach (string s in boolFieldsNames)
+                {
+                    bool? contains = boolFieldsValues?.Contains(s);
+                    if (contains != null && (bool)contains)
+                        boolsStrs.Add("True");
+                    else
+                        boolsStrs.Add("False");
+                }
+                result.SetBooleanFieldsValues(boolsStrs.ToArray());
+                filled = true;
+            }
+
+
+            if (filled)
+                return result;
+            else
+                return null;
         }
 
         [HttpGet]
@@ -125,6 +192,14 @@ namespace ITransitionProject.Controllers
                 return StatusCode(404);
             string[] NumericFieldsNames = AdditionalFieldsNames.GetNumericFieldsArray(appContext, col.AddFieldsNamesId);            
             string[] NumericFieldsValues = AdditionalFieldsValues.GetNumericValuesArray(appContext, item.AddFieldsValuesId);
+            string[] SLFieldsNames = AdditionalFieldsNames.GetSingleLineFieldsArray(appContext, col.AddFieldsNamesId);
+            string[] SLFieldsValues = AdditionalFieldsValues.GetSingleLineValuesArray(appContext, item.AddFieldsValuesId);
+            string[] MLFieldsNames = AdditionalFieldsNames.GetMultiLineFieldsArray(appContext, col.AddFieldsNamesId);
+            string[] MLFieldsValues = AdditionalFieldsValues.GetMultiLineValuesArray(appContext, item.AddFieldsValuesId);
+            string[] DateFieldsNames = AdditionalFieldsNames.GetDateFieldsArray(appContext, col.AddFieldsNamesId);
+            string[] DateFieldsValues =AdditionalFieldsValues.GetDateValuesArray(appContext, item.AddFieldsValuesId);
+            string[] BoolFieldsNames = AdditionalFieldsNames.GetBooleanFieldsArray(appContext, col.AddFieldsNamesId);
+            string[] BoolFieldsValues = AdditionalFieldsValues.GetBooleanValuesArray(appContext, item.AddFieldsValuesId);
             List<string> itemTags = appContext.Tags.Where(t => t.ItemCollectionUserId == model.UserId && t.ItemId == model.ItemId).Select(t => t.TagValue).ToList();
 
             return View(new EditItemViewModel
@@ -137,6 +212,14 @@ namespace ITransitionProject.Controllers
                 CollectionTheme = model.CollectionTheme,
                 NumericFieldsNames = NumericFieldsNames,
                 NumericFieldsValues = NumericFieldsValues,
+                SLFieldsNames = SLFieldsNames,
+                SLFieldsValues = SLFieldsValues,
+                MLFieldsNames = MLFieldsNames,
+                MLFieldsValues = MLFieldsValues,
+                DateFieldsNames= DateFieldsNames,
+                DateFieldsValues = DateFieldsValues,
+                BoolFieldsNames = BoolFieldsNames,
+                BoolFieldsValues = BoolFieldsValues,
                 JsonTags = JsonConvert.SerializeObject(itemTags),
                 JsonInitialTags = CommonHelpers.GetInitialTagsJson(appContext)
             });
@@ -145,15 +228,73 @@ namespace ITransitionProject.Controllers
         [HttpPost]
         public async Task<IActionResult> EditItem(EditItemViewModel model)
         {
-            Item item = FindItem(model.ItemId);
-            item.Name = model.Name;
-            item.AddFieldsValues = new AdditionalFieldsValues(model.NumericFieldsValues);
-            List<string> tags = ParseJsonValues(model.JsonTags);
-            UpdateTagsInDB(model.UserId, model.ItemId, tags);
-            AddUniqueTags(tags);
-            appContext.Items.Update(item);
-            await appContext.SaveChangesAsync();
-            return RedirectToAction("ViewCollection", "Collections", new { userId = model.UserId, collectionId = model.CollectionId });
+            if (ModelState.IsValid)
+            {
+                Item item = FindItem(model.ItemId);
+                item.Name = model.Name;
+                UpdateAdditionalFieldsValues(
+                    item,
+                    model.NumericFieldsValues,
+                    model.SLFieldsValues,
+                    model.MLFieldsValues,
+                    model.DateFieldsValues,
+                    model.BoolFieldsValues,
+                    model.BoolFieldsNames);
+                List<string> tags = ParseJsonValues(model.JsonTags);
+                UpdateTagsInDB(model.UserId, model.ItemId, tags);
+                AddUniqueTags(tags);
+                appContext.Items.Update(item);
+                await appContext.SaveChangesAsync();
+                return RedirectToAction("ViewCollection", "Collections", new { userId = model.UserId, collectionId = model.CollectionId });
+            }
+            else
+                ModelState.AddModelError("", "Некорректно заполнены поля.");
+
+            return View(model);
+        }
+
+        private void UpdateAdditionalFieldsValues(Item item,
+            string[] numericFieldsValues,
+            string[] SLFieldsValues,
+            string[] MLFieldsvalues,
+            string[] dateFieldsValues,
+            string[] boolFieldsValues,
+            string[] boolFieldsNames)
+        {
+            if (item.AddFieldsValuesId == Guid.Empty)
+                return;
+
+            AdditionalFieldsValues afv = appContext.AdditionalFieldsValues.Find(item.AddFieldsValuesId);
+            if (numericFieldsValues != null)
+            {
+                afv.SetNumericFieldsValues(numericFieldsValues);
+            }
+            if (SLFieldsValues != null)
+            {
+                afv.SetSingleLineFieldsValues(SLFieldsValues);
+            }
+            if (MLFieldsvalues != null)
+            {
+                afv.SetMultiLineFieldsValues(MLFieldsvalues);
+            }
+            if (dateFieldsValues != null)
+            {
+                afv.SetDateFieldsValues(dateFieldsValues);
+            }
+            if (boolFieldsNames != null)
+            {
+                List<string> boolsStrs = new List<string>();
+                foreach (string s in boolFieldsNames)
+                {
+                    bool? contains = boolFieldsValues?.Contains(s);
+                    if (contains != null && (bool)contains)
+                        boolsStrs.Add("True");
+                    else
+                        boolsStrs.Add("False");
+                }
+                afv.SetBooleanFieldsValues(boolsStrs.ToArray());
+            }
+            appContext.AdditionalFieldsValues.Update(afv);
         }
 
         [AllowAnonymous]

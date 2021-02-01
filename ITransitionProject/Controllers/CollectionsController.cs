@@ -146,6 +146,7 @@ namespace ITransitionProject.Controllers
         {
             Collection col = FindCollection(collectionId);
             List<Item> items = appContext.Items.Where(i => i.CollectionId == collectionId).ToList();
+            string debug = AdditionalFieldsNames.GetAllNames(appContext, col.AddFieldsNamesId);
             ViewBag.AdditionalFieldsNames = AdditionalFieldsNames.GetAllNames(appContext, col.AddFieldsNamesId);
             return View(new EditCollectionItemsViewModel(userId, collectionId, col.Name, EnumHelper.GetEnumDisplayName(col.Theme), items));
         }

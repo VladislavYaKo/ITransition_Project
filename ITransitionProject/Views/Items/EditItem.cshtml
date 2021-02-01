@@ -24,6 +24,42 @@
         </label><br />
         <input type="hidden" name="NumericFieldsNames" value="@Model.NumericFieldsNames[i]" />
     }
+    @for (int i = 0; i < Model.SLFieldsNames?.Length; i++)
+    {
+        <label>
+            @Model.SLFieldsNames[i]: <input type="text" name="SLFieldsValues" value="@Model.SLFieldsValues[i]" maxlength="256" />
+        </label><br />
+        <input type="hidden" name="SLFieldsNames" value="@Model.SLFieldsNames[i]" />
+    }
+    @*@for (int i = 0; i < Model.MLFieldsNames?.Length; i++) //Здесь нужен textarea
+        {
+            <label>
+                @Model.NumericFieldsNames[i]: <input type="number" name="NumericFieldsValues" value="@Model.NumericFieldsValues[i]" maxlength="15" />
+            </label><br />
+            <input type="hidden" name="NumericFieldsNames" value="@Model.NumericFieldsNames[i]" />
+        }*@
+    @for (int i = 0; i < Model.DateFieldsNames?.Length; i++)
+    {
+        <label>
+            @Model.DateFieldsNames[i]: <input type="date" name="DateFieldsValues" value="@Model.DateFieldsValues[i]" maxlength="15" />
+        </label><br />
+        <input type="hidden" name="DateFieldsNames" value="@Model.DateFieldsNames[i]" />
+    }
+    @for (int i = 0; i < Model.BoolFieldsNames?.Length; i++)
+    {
+        <label>
+            @Model.BoolFieldsNames[i]:
+            @if (Model.BoolFieldsValues[i] == "True")
+            {
+                <input type="checkbox" name="BoolFieldsValues" value="@Model.BoolFieldsNames[i]" checked />
+            }
+            else
+            {
+                <input type="checkbox" name="BoolFieldsValues" value="@Model.BoolFieldsNames[i]" />
+            }
+        </label><br />
+        <input type="hidden" name="BoolFieldsNames" value="@Model.BoolFieldsNames[i]" />
+    }
     <button class="btn" style="color: darkred" formmethod="get" asp-controller="Collections" asp-action="ViewCollection">Отмена</button>
     <input type="submit" class="btn btn-success" value="Сохранить" />
 </form>

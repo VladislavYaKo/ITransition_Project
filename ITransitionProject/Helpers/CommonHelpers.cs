@@ -55,7 +55,7 @@ namespace ITransitionProject.Helpers
             {
                 int range = selectRange;
                 if (i + selectRange > elemCount)
-                    range = elemCount - 1;
+                    range = elemCount - i;
                 buf = FindSeveralMax<UniqueTag, uint>(appContext.UniqueTags.ToList().GetRange(i, range), range, i => i.Usage);
                 buf.AddRange(result);
                 result = buf.OrderByDescending(i => i.Usage).ToList().GetRange(0, range);

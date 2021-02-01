@@ -10,11 +10,6 @@ namespace ITransitionProject.Models
     public class AdditionalFieldsValues
     {
         public AdditionalFieldsValues() { }
-
-        public AdditionalFieldsValues(string[] numericFieldsValues)
-        {
-            this.NumericFieldsValues = numericFieldsValues != null ? String.Join(',', numericFieldsValues) : null;
-        }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public Guid Id { get; set; }
@@ -28,6 +23,31 @@ namespace ITransitionProject.Models
         public string DateFieldsValues { get; set; }
         [MaxLength(40)]
         public string BooleanFieldsValues { get; set; }
+
+        public void SetNumericFieldsValues(string[] nfv)
+        {
+            this.NumericFieldsValues = nfv != null ? String.Join(',', nfv) : null;
+        }
+
+        public void SetSingleLineFieldsValues(string[] slfv)
+        {
+            this.SingleLineFieldsValues = slfv != null ? String.Join(',', slfv) : null;
+        }
+
+        public void SetMultiLineFieldsValues(string[] mlfv)
+        {
+            this.MultiLineFieldsValues = mlfv != null ? String.Join(',', mlfv) : null;
+        }
+
+        public void SetDateFieldsValues(string[] dfv)
+        {
+            this.DateFieldsValues = dfv != null ? String.Join(',', dfv) : null;
+        }
+
+        public void SetBooleanFieldsValues(string[] bfv)
+        {
+            this.BooleanFieldsValues = bfv != null ? String.Join(',', bfv) : null;
+        }
 
         public string[] GetNumericValuesArray()
         {
@@ -103,7 +123,7 @@ namespace ITransitionProject.Models
             if (id != Guid.Empty)
             {
                 AdditionalFieldsValues afv = appContext.AdditionalFieldsValues.Find(id);
-                return afv.GetNumericValuesArray();
+                return afv.GetBooleanValuesArray();
             }
 
             return null;

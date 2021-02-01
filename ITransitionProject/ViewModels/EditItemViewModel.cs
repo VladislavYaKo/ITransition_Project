@@ -26,7 +26,7 @@ namespace ITransitionProject.ViewModels
         public string[] DateFieldsNames { get; set; }
         public string[] DateFieldsValues { get; set; }
         public string[] BoolFieldsNames { get; set; }
-        public string[] BoolsFieldsValues { get; set; }
+        public string[] BoolFieldsValues { get; set; }
 
         public string JsonInitialTags { get; set; }
         public string JsonTags { get; set; }
