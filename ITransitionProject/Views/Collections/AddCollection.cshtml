@@ -26,15 +26,22 @@
         <span asp-validation-for="ImgUrl"></span>
     </div>
     <div id="additional-fields-container">
-        @*<div id="int-div-template" style="display: none">
-            <label id="label">Название числового поля</label>
-            <br />
-            <input id="input" type="number" maxlength="20" name="intFieldName" disabled="disabled"/>
-            <br />
-        </div>*@
+
     </div>
     <input type="button" class="btn" style="color: brown" name="AddIntField" onclick="AddIntFieldClick()" value="Добавить числовое поле">
     <input type="button" class="btn btn-danger" name="DelIntField" onclick="DelIntFieldClick()" value="Удалить числовое поле"><br />
+
+    <input type="button" class="btn" style="color: brown" name="AddSLField" onclick="AddSLFieldClick()" value="Добавить однострочное поле">
+    <input type="button" class="btn btn-danger" name="DelSLField" onclick="DelSLFieldClick()" value="Удалить однострочное поле"><br />
+
+    <input type="button" class="btn" style="color: brown" name="AddMLField" onclick="AddMLFieldClick()" value="Добавить многострочное поле">
+    <input type="button" class="btn btn-danger" name="DelMLField" onclick="DelMLFieldClick()" value="Удалить многострочное поле"><br />
+
+    <input type="button" class="btn" style="color: brown" name="AddDateField" onclick="AddDateFieldClick()" value="Добавить поле даты">
+    <input type="button" class="btn btn-danger" name="DelDateField" onclick="DelDateFieldClick()" value="Удалить поле даты"><br />
+
+    <input type="button" class="btn" style="color: brown" name="AddBoolField" onclick="AddBoolFieldClick()" value="Добавить поле чекбокс">
+    <input type="button" class="btn btn-danger" name="DelBoolField" onclick="DelBoolFieldClick()" value="Удалить поле чекбокс"><br />
     <input type="submit" class="btn btn-primary" value="Добавить коллекцию" />
 </form>
 
@@ -43,29 +50,53 @@
 {
     @await Html.PartialAsync("_ValidationScriptsPartial");
     <script>
-        var intFieldsNum = 0;
-        var doc = document;
+        var intFieldsCounter = { value: 0 },
+            slFieldsCounter = { value: 0 },
+            mlFieldCounter = { value: 0 },
+            dateFieldCounter = { value: 0 },
+            boolFieldCounter = { value: 0 },        
+            doc = document;
+
         function AddIntFieldClick() {
-            if (intFieldsNum >= 3) {
+            AddField('int-div-', 'Название числового поля', 'int-input-', 'NumericFieldName', intFieldsCounter);
+        }
+
+        function AddSLFieldClick() {
+            AddField('sl-div-', 'Название однострочного поля', 'sl-input-', 'SingleLineFieldName', slFieldsCounter)
+        }
+
+        function AddMLFieldClick() {
+            AddField('ml-div-', 'Название многострочного поля', 'ml-input-', 'MultiLineFieldName', mlFieldCounter);
+        }
+
+        function AddDateFieldClick() {
+            AddField('date-div-', 'Название поля даты', 'date-input-', 'DateFieldName', dateFieldCounter);
+        }
+
+        function AddBoolFieldClick() {
+            AddField('bool-div-', 'Название поля чекбокса', 'bool-input-', 'BoolFieldName', boolFieldCounter);
+        }
+
+        function AddField(divId, labelInner, inputId, inputName, counter) {
+            if (counter.value >= 3) {
                 alert('Вы не можете создать больше трёх полей!');
                 return;
             }
 
-            intFieldsNum++;
+            counter.value++;
             let addFields = doc.getElementById('additional-fields-container'),
-                elemDiv = doc.createElement('div');
+                elemDiv = doc.createElement('div'),
                 elemNameLabel = doc.createElement('label'),
                 elemNameInput = doc.createElement('input'),
                 elemBr = doc.createElement('br');
 
-            elemDiv.id = 'int-div-' + intFieldsNum;
-            elemNameLabel.setAttribute('for', 'int-field-' + intFieldsNum);
-            elemNameLabel.id = 'int-field-label-' + intFieldsNum;
-            elemNameLabel.innerHTML = 'Название числового поля';
+            elemDiv.id = divId + counter.value;
+            elemNameLabel.setAttribute('for', inputId + counter.value);
+            elemNameLabel.innerHTML = labelInner;
             elemNameInput.type = 'text';
-            elemNameInput.maxLength = 20;
-            elemNameInput.id = 'int-field-' + intFieldsNum;
-            elemNameInput.name = 'NumericFieldName';
+            elemNameInput.maxLength = 50;
+            elemNameInput.id = inputId + counter.value;
+            elemNameInput.name = inputName;
             elemNameInput.setAttribute('required', '');
 
             elemDiv.appendChild(elemBr);
@@ -76,46 +107,36 @@
             addFields.appendChild(elemDiv);
         }
 
-        @*function AddIntFieldClick() {
-            if (intFieldsNum >= 3) {
-                alert('Вы не можете создать больше трёх полей!');
-                return;
-            }
-
-            intFieldsNum++;
-            let elemDiv = doc.getElementById('int-div-template'),
-                elemLabel = doc.getElementById('label'),
-                elemInput = doc.getElementById('input'),
-                elemNewDiv = elemDiv.cloneNode(true);
-                elemDivLabel = elemLabel.cloneNode(false),
-                elemDivInput = elemInput.cloneNode(false);
-
-            elemNewDiv.setAttribute('style', '');
-            elemNewDiv.setAttribute('id', 'int-div-' + intFieldsNum);
-            console.log(elemDiv.childNodes);
-            elemDivLabel.setAttribute('for', 'int-field-' + intFieldsNum);
-            alert(elemNewDiv.childNodes.length);
-            elemNewDiv.childNodes[0] = elemDivLabel;
-            elemDivInput.setAttribute('required', '');
-            elemDivInput.setAttribute('disabled', '');
-            elemNewDiv.childNodes[2] = elemDivInput;
-            elemDiv.parentNode.appendChild(elemNewDiv);
-        }*@
-
         function DelIntFieldClick() {
-            if (intFieldsNum <= 0)
+            DelField('int-div-', intFieldsCounter);
+        }
+
+        function DelSLFieldClick() {
+            DelField('sl-div-', slFieldsCounter);
+        }
+
+        function DelMLFieldClick() {
+            DelField('ml-div-', mlFieldCounter);
+        }
+
+        function DelDateFieldClick() {
+            DelField('date-div-', dateFieldCounter);
+        }
+
+        function DelBoolFieldClick() {
+            DelField('bool-div-', boolFieldCounter);
+        }
+
+        function DelField(divId, counter) {
+            if (counter.value <= 0)
                 return;
-
-            var doc = document,
-                delDiv = doc.getElementById('int-div-' + intFieldsNum);
-
+            let delDiv = doc.getElementById(divId + counter.value);
             try {
                 delDiv.parentNode.removeChild(delDiv);
-                intFieldsNum--;
-            } catch (e) {
+                counter.value--;
+            } catch(e){
                 alert('Произошла ошибка: ' + e);
             }
-
         }
     </script>
 }

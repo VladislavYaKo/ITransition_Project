@@ -15,6 +15,30 @@
         <span>@Model.NumericFieldsNames[i]: @Model.NumericFieldsValues[i]</span>
     </div>
 }
+@for (int i = 0; i < Model.SLFieldsNames?.Length; i++)
+{
+    <div>
+        <span>@Model.SLFieldsNames[i]: @Model.SLFieldsValues[i]</span>
+    </div>
+}
+@for (int i = 0; i < Model.MLFieldsNames?.Length; i++)
+{
+    <div>
+        <span>@Model.MLFieldsNames[i]: @Model.MLFieldsNames[i]</span>
+    </div>
+}
+@for (int i = 0; i < Model.DateFieldsNames?.Length; i++)
+{
+    <div>
+        <span>@Model.DateFieldsNames[i]: @Model.DateFieldsNames[i]</span>
+    </div>
+}
+@for (int i = 0; i < Model.BoolFieldsNames?.Length; i++)
+{
+    <div>
+        <span>@Model.BoolFieldsNames[i]: @Model.BoolFieldsNames[i]</span>
+    </div>
+}
 
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/3.22.1/tagify.min.js"

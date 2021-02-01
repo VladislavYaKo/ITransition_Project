@@ -45,11 +45,12 @@ namespace ITransitionProject.Controllers
         {
             if(ModelState.IsValid)
             {
-                AdditionalFieldsNames afn = null;
-                if (model.NumericFieldName?.Length > 0)
-                    afn = new AdditionalFieldsNames(model.NumericFieldName);
-                Collection newCollection = new Collection { 
-                    //UserId = model.UserId,
+                AdditionalFieldsNames afn = SetAdditionalFieldsNames(model.NumericFieldName, 
+                    model.SingleLineFieldName, 
+                    model.MultiLineFieldName, 
+                    model.DateFieldName, 
+                    model.BoolFieldName);
+                Collection newCollection = new Collection {
                     Name = model.Name, 
                     Theme = model.Theme, 
                     briefDesc = model.BriefDesc, 
@@ -67,6 +68,45 @@ namespace ITransitionProject.Controllers
                 ModelState.AddModelError("", "Введите все требуемые поля.");
             }
             return View(new EditCollectionViewModel { UserId = model.UserId });
+        }
+
+        private AdditionalFieldsNames SetAdditionalFieldsNames(string[] numericFieldsNames,
+            string[] SLFieldsNames,
+            string[] MLFieldsNames,
+            string[] dateFieldsNames,
+            string[] boolFieldsNames)
+        {
+            bool filled = false;
+            AdditionalFieldsNames result = new AdditionalFieldsNames();
+            if (numericFieldsNames != null)
+            {
+                result.SetNumericFieldsNames(numericFieldsNames);
+                filled = true;
+            }
+            if (SLFieldsNames != null)
+            {
+                result.SetSingleLineFieldsNames(SLFieldsNames);
+                filled = true;
+            }
+            if (MLFieldsNames != null)
+            {
+                result.SetMultiLineFieldsNames(MLFieldsNames);
+                filled = true;
+            }
+            if(dateFieldsNames != null)
+            {
+                result.SetDateFieldsNames(dateFieldsNames);
+                filled = true;
+            }
+            if(boolFieldsNames != null)
+            {
+                result.SetBoolFieldsNames(boolFieldsNames);
+                filled = true;
+            }
+            if (filled)
+                return result;
+            else
+                return null;
         }
 
         [HttpGet]
@@ -120,16 +160,7 @@ namespace ITransitionProject.Controllers
             await appContext.SaveChangesAsync();
             ViewBag.userId = userId;
             return View("EditCollections", CommonHelpers.MakeUpUserCollectionsVM(userId, appContext));
-        }              
-
-        /*private int CalculateNewCollectionIndex(string userId)
-        {
-            List<Collection> colList = appContext.Collections.Where(p => p.UserId == userId).ToList();
-            if (colList.Count > 0)
-                return colList.Max(p => p.Id) + 1;
-            else
-                return 1;
-        }*/
+        }
 
         private Collection FindCollection(Guid collectionId)
         {

@@ -24,9 +24,6 @@
                         <div class="col-md-5">
                             <ul class="nav">
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Главная</a>
-                                </li>
-                                <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="ViewUsers">Пользователи</a>
                                 </li>
                                 <li class="nav-item">
@@ -35,7 +32,7 @@
                             </ul>
                         </div>
                         <div class="col-md-7">
-                            <form role="form" asp-controller="Items" asp-action="">
+                            <form role="form" asp-controller="Items" asp-action="FoundResult">
                                 <div class="row">
                                     <div class="col-md-8">
                                         <input type="text" placeholder="Поиск..." class="form-control form-control-sm" name="search"/>

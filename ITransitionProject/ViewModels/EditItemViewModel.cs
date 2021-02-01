@@ -19,6 +19,15 @@ namespace ITransitionProject.ViewModels
         public string CollectionTheme { get; set; }
         public string[] NumericFieldsNames { get; set; }
         public string[] NumericFieldsValues { get; set; }
+        public string[] SLFieldsNames { get; set; }
+        public string[] SLFieldsValues { get; set; }
+        public string[] MLFieldsNames { get; set; }
+        public string[] MLFieldsValues { get; set; }
+        public string[] DateFieldsNames { get; set; }
+        public string[] DateFieldsValues { get; set; }
+        public string[] BoolFieldsNames { get; set; }
+        public string[] BoolsFieldsValues { get; set; }
+
         public string JsonInitialTags { get; set; }
         public string JsonTags { get; set; }
     }

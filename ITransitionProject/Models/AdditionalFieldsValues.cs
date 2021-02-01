@@ -44,5 +44,69 @@ namespace ITransitionProject.Models
 
             return null;
         }
+
+        public string[] GetSingleLineValuesArray()
+        {
+            return SingleLineFieldsValues != null ? SingleLineFieldsValues.Split(',') : null;
+        }
+
+        public static string[] GetSingleLineValuesArray(ApplicationContext appContext, Guid id)
+        {
+            if (id != Guid.Empty)
+            {
+                AdditionalFieldsValues afv = appContext.AdditionalFieldsValues.Find(id);
+                return afv.GetSingleLineValuesArray();
+            }
+
+            return null;
+        }
+
+        public string[] GetMultiLineValuesArray()
+        {
+            return MultiLineFieldsValues != null ? MultiLineFieldsValues.Split(',') : null;
+        }
+
+        public static string[] GetMultiLineValuesArray(ApplicationContext appContext, Guid id)
+        {
+            if (id != Guid.Empty)
+            {
+                AdditionalFieldsValues afv = appContext.AdditionalFieldsValues.Find(id);
+                return afv.GetMultiLineValuesArray();
+            }
+
+            return null;
+        }
+
+        public string[] GetDateValuesArray()
+        {
+            return DateFieldsValues != null ? DateFieldsValues.Split(',') : null;
+        }
+
+        public static string[] GetDateValuesArray(ApplicationContext appContext, Guid id)
+        {
+            if (id != Guid.Empty)
+            {
+                AdditionalFieldsValues afv = appContext.AdditionalFieldsValues.Find(id);
+                return afv.GetDateValuesArray();
+            }
+
+            return null;
+        }
+
+        public string[] GetBooleanValuesArray()
+        {
+            return BooleanFieldsValues != null ? BooleanFieldsValues.Split(',') : null;
+        }
+
+        public static string[] GetBooleanValuesArray(ApplicationContext appContext, Guid id)
+        {
+            if (id != Guid.Empty)
+            {
+                AdditionalFieldsValues afv = appContext.AdditionalFieldsValues.Find(id);
+                return afv.GetNumericValuesArray();
+            }
+
+            return null;
+        }
     }
 }

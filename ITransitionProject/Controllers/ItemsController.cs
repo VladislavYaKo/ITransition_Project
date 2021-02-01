@@ -4,6 +4,7 @@ using ITransitionProject.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -39,6 +40,14 @@ namespace ITransitionProject.Controllers
                 CollectionTheme = model.CollectionTheme,
                 NumericFieldsNames = AdditionalFieldsNames.GetNumericFieldsArray(appContext, col.AddFieldsNamesId),
                 NumericFieldsValues = AdditionalFieldsValues.GetNumericValuesArray(appContext, item.AddFieldsValuesId),
+                SLFieldsNames = AdditionalFieldsNames.GetSingleLineFieldsArray(appContext, col.AddFieldsNamesId),
+                SLFieldsValues = AdditionalFieldsValues.GetSingleLineValuesArray(appContext, col.AddFieldsNamesId),
+                MLFieldsNames = AdditionalFieldsNames.GetMultiLineFieldsArray(appContext, col.AddFieldsNamesId),
+                MLFieldsValues = AdditionalFieldsValues.GetMultiLineValuesArray(appContext, col.AddFieldsNamesId),
+                DateFieldsNames = AdditionalFieldsNames.GetDateFieldsArray(appContext, col.AddFieldsNamesId),
+                DateFieldsValues = AdditionalFieldsValues.GetDateValuesArray(appContext, col.AddFieldsNamesId),
+                BoolFieldsNames = AdditionalFieldsNames.GetBooleanFieldsArray(appContext, col.AddFieldsNamesId),
+                BoolsFieldsValues = AdditionalFieldsValues.GetBooleanValuesArray(appContext, col.AddFieldsNamesId),
                 JsonTags = JsonConvert.SerializeObject(itemTags)
             }
             );
@@ -161,11 +170,26 @@ namespace ITransitionProject.Controllers
             return View(MakeUpListFoundResultVM(foundItems));
         }
 
-        /*[AllowAnonymous]
+        [AllowAnonymous]
         public IActionResult FoundResult(string search)
         {
 
-        }*/
+            var result1 = from i in appContext.Items
+                         where EF.Functions.FreeText(i.Name, search)
+                         select i;
+            List<Item> result = new List<Item>();
+            result = result1 != null ? result1.ToList() : result;
+
+            var result2 = from c in appContext.Collections
+                          where EF.Functions.FreeText(c.briefDesc, search)
+                          select c.Id;
+            foreach(Guid id in (result2 != null ? result2.ToList() : new List<Guid>()))
+            {
+                result.AddRange(appContext.Items.Where(i => i.CollectionId == id).ToList());
+            }
+            return View("TagFoundResult", MakeUpListFoundResultVM(result.ToList()));
+
+        }
 
         private List<string> ParseJsonValues(string jsonStr)
         {

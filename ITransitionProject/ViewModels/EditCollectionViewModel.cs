@@ -22,5 +22,9 @@ namespace ITransitionProject.ViewModels
         [MaxLength(100)]
         public string ImgUrl { get; set; }
         public string[] NumericFieldName { get; set; }
+        public string[] SingleLineFieldName { get; set; }
+        public string[] MultiLineFieldName { get; set; }
+        public string[] DateFieldName { get; set; }
+        public string[] BoolFieldName { get; set; }
     }
 }

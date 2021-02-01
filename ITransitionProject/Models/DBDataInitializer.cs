@@ -8,7 +8,7 @@ namespace ITransitionProject.Models
 {
     public class DBDataInitializer
     {
-        public static async Task InitializeAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public static async Task InitializeAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, ApplicationContext appContext)
         {
             string login = "admin@mail.ru";
             string password = "_Aa12345";           
@@ -29,6 +29,14 @@ namespace ITransitionProject.Models
                     await userManager.AddToRoleAsync(admin, "admin");
                 }
             }
+
+            AdditionalFieldsNames afn = appContext.AdditionalFieldsNames.Find(Guid.Empty);
+            if (afn == null)
+                appContext.AdditionalFieldsNames.Add(new AdditionalFieldsNames { Id = Guid.Empty });
+            AdditionalFieldsValues afv = appContext.AdditionalFieldsValues.Find(Guid.Empty);
+            if (afv == null)
+                appContext.AdditionalFieldsValues.Add(new AdditionalFieldsValues { Id = Guid.Empty });
+            await appContext.SaveChangesAsync();
         }
     }
 }

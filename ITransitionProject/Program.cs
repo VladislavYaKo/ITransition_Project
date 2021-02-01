@@ -22,7 +22,8 @@ namespace ITransitionProject
                 var services = scope.ServiceProvider;
                 var userManager = services.GetRequiredService<UserManager<User>>();
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-                Task t = DBDataInitializer.InitializeAsync(userManager, roleManager);
+                var appContext = services.GetRequiredService<ApplicationContext>();
+                Task t = DBDataInitializer.InitializeAsync(userManager, roleManager, appContext);
                 t.Wait();
             }
             host.Run();
