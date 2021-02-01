@@ -30,13 +30,13 @@
         </label><br />
         <input type="hidden" name="SLFieldsNames" value="@Model.SLFieldsNames[i]" />
     }
-    @*@for (int i = 0; i < Model.MLFieldsNames?.Length; i++) //Здесь нужен textarea
+    @for (int i = 0; i < Model.MLFieldsNames?.Length; i++)
     {
         <label>
-            @Model.NumericFieldsNames[i]: <input type="number" name="NumericFieldsValues" value="@Model.NumericFieldsValues[i]" maxlength="15" />
+            @Model.MLFieldsNames[i]: <textarea name="MLFieldsValues" maxlength="1024">@Model.MLFieldsValues[i]</textarea>
         </label><br />
-        <input type="hidden" name="NumericFieldsNames" value="@Model.NumericFieldsNames[i]" />
-    }*@
+        <input type="hidden" name="MLFieldsNames" value="@Model.MLFieldsNames[i]" />
+    }
     @for (int i = 0; i < Model.DateFieldsNames?.Length; i++)
     {
         <label>

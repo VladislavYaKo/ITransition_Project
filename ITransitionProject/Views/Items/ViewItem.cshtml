@@ -21,16 +21,17 @@
         <span>@Model.SLFieldsNames[i]: @Model.SLFieldsValues[i]</span>
     </div>
 }
-@*@for (int i = 0; i < Model.MLFieldsNames?.Length; i++)
+@for (int i = 0; i < Model.MLFieldsNames?.Length; i++)
 {
-    <div>
-        <span>@Model.MLFieldsNames[i]: @Model.MLFieldsValues[i]</span>
-    </div>
-}*@
+    <label>
+        @Model.MLFieldsNames[i]: <textarea readonly name="MLFieldsValues" maxlength="1024">@Model.MLFieldsValues[i]</textarea>
+    </label>
+    <br />
+}
 @for (int i = 0; i < Model.DateFieldsNames?.Length; i++)
 {
     <div>
-        <span>@Model.DateFieldsNames[i]: <input type="date" value="@Model.DateFieldsValues[i]" readonly/></span>
+        <span>@Model.DateFieldsNames[i]: <input type="date" value="@Model.DateFieldsValues[i]" readonly /></span>
     </div>
 }
 @for (int i = 0; i < Model.BoolFieldsNames?.Length; i++)
