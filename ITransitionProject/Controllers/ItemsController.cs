@@ -108,6 +108,9 @@ namespace ITransitionProject.Controllers
                 };
                 newItem.SetTags(tags);
                 AddUniqueTags(tags);
+                Collection col = appContext.Collections.Find(model.CollectionId);
+                col.ItemsCount++;
+                appContext.Collections.Update(col);
                 await appContext.Items.AddAsync(newItem);
                 await appContext.SaveChangesAsync();
                 return RedirectToAction("ViewCollection", "Collections", new { userId = model.UserId, collectionId = model.CollectionId });
@@ -176,6 +179,9 @@ namespace ITransitionProject.Controllers
                 return StatusCode(403);
 
             appContext.Items.Remove(FindItem(itemId));
+            Collection col = appContext.Collections.Find(model.CollectionId);
+            col.ItemsCount--;
+            appContext.Collections.Update(col);
             await appContext.SaveChangesAsync();
             return RedirectToAction("ViewCollection", "Collections", new { userId = model.UserId, collectionId = model.CollectionId });
         }

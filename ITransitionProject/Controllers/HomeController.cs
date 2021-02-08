@@ -25,6 +25,12 @@ namespace ITransitionProject.Controllers
         {
             IndexViewModel model = new IndexViewModel();
             model.JsonTagsCloud = CommonHelpers.GetInitialTagsJson(appContext, 20);
+            List<Collection> collections = CommonHelpers.GetBiggestCollections(appContext, 20);
+            model.CollectionVMs = new List<UserCollectionsViewModel>();
+            foreach(Collection col in collections)
+            {
+                model.CollectionVMs.Add(new UserCollectionsViewModel(col, EnumHelper.GetEnumDisplayName(col.Theme)));
+            }
             return View(model);
         }
 

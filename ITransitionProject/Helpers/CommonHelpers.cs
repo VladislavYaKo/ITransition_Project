@@ -59,7 +59,7 @@ namespace ITransitionProject.Helpers
                 buf = FindSeveralMax<UniqueTag, uint>(appContext.UniqueTags.ToList().GetRange(i, range), range, i => i.Usage);
                 buf.AddRange(result);
                 result = buf.OrderByDescending(i => i.Usage).ToList().GetRange(0, range);
-                i += selectRange;
+                i += range;
             }
             return result;
         }
@@ -67,6 +67,25 @@ namespace ITransitionProject.Helpers
         private static List<T> FindSeveralMax<T, TKey>(List<T> src, int itemsNum, Func<T, TKey> keySelector)
         {
             return src.OrderByDescending(keySelector).ToList().GetRange(0, itemsNum);
+        }
+
+        public static List<Collection> GetBiggestCollections(ApplicationContext appContext, int collectionsNum)
+        {
+            int i = 0;
+            int elemCount = appContext.Collections.Count();
+            List<Collection> result = new List<Collection>();
+            List<Collection> buf = new List<Collection>();
+            while (i < elemCount)
+            {
+                int range = selectRange;
+                if (i + selectRange > elemCount)
+                    range = elemCount - i;
+                buf = FindSeveralMax<Collection, int>(appContext.Collections.ToList().GetRange(i, range), range, c => c.ItemsCount);
+                buf.AddRange(result);
+                result = buf.OrderByDescending(c => c.ItemsCount).ToList().GetRange(0, range);
+                i += range;
+            }
+            return result;
         }
     }
 }
